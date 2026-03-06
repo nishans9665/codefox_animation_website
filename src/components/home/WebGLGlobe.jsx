@@ -89,7 +89,7 @@ const WebGLGlobe = () => {
             }
         };
     }, []);
-
+ 
     return (
         <div
             ref={containerRef}
