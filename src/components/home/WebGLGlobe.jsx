@@ -24,10 +24,12 @@ const WebGLGlobe = () => {
 
         const initGlobe = async () => {
             try {
+                const baseUrl = import.meta.env.BASE_URL;
+
                 if (!window.THREE) {
-                    await loadScript('/globe/three.min.js');
-                    await loadScript('/globe/Detector.js');
-                    await loadScript('/globe/globe.js');
+                    await loadScript(`${baseUrl}globe/three.min.js`);
+                    await loadScript(`${baseUrl}globe/Detector.js`);
+                    await loadScript(`${baseUrl}globe/globe.js`);
                 }
 
                 if (!isMounted || !containerRef.current) return;
@@ -43,12 +45,12 @@ const WebGLGlobe = () => {
                 }
 
                 const globe = new window.DAT.Globe(containerRef.current, {
-                    imgDir: '/globe/'
+                    imgDir: `${baseUrl}globe/`
                 });
 
                 globeInstance.current = globe;
 
-                const response = await fetch('/globe/population909500.json');
+                const response = await fetch(`${baseUrl}globe/population909500.json`);
                 const data = await response.json();
 
                 if (!isMounted) return;
@@ -89,7 +91,7 @@ const WebGLGlobe = () => {
             }
         };
     }, []);
- 
+
     return (
         <div
             ref={containerRef}
