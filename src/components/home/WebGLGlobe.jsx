@@ -114,4 +114,4 @@ const WebGLGlobe = () => {
     );
 };
 
-export default WebGLGlobe;
+export default WebGLGlobe;  
