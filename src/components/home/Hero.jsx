@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Rocket } from 'lucide-react';
 import WebGLGlobe from './WebGLGlobe';
 import './Hero.css';
@@ -35,9 +36,9 @@ const Hero = () => {
                             Our Services
                             <ArrowRight size={18} style={{ marginLeft: '8px' }} />
                         </a>
-                        <a href="#contact" className="btn btn-secondary hero-btn-secondary">
+                        <Link to="/contact" className="btn btn-secondary hero-btn-secondary">
                             Contact Us
-                        </a>
+                        </Link>
                     </div>
 
                     <div className="hero-stats animate-fade-in-up delay-4">

@@ -55,11 +55,7 @@ const Footer = () => {
                             </li>
                             <li><Link to="/about">About Us</Link></li>
                             <li>
-                                {location.pathname === '/' ? (
-                                    <a href="#contact">Contact</a>
-                                ) : (
-                                    <Link to="/#contact">Contact</Link>
-                                )}
+                                <Link to="/contact">Contact</Link>
                             </li>
                         </ul>
                     </div>
