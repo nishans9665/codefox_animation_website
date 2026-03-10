@@ -76,7 +76,7 @@ const WebGLGlobe = () => {
                         // 2000ms (2 seconds) of idle time before auto-rotating
                         if (Date.now() - lastInteractionTime > 2000) {
                             if (globe.target) {
-                                globe.target.x -= 0.002;
+                                globe.target.x -= 0.0008;
                             }
                         }
                         requestAnimationFrame(rotateGlobe);
