@@ -2,11 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import ctaBg from '../../assets/cta-section-bg-image.png';
+import rocketImg from '../../assets/view-3d-space-rocket-model.webp';
 import './CTA.css';
 
 const CTA = () => {
     return (
         <section className="cta-section" id="cta" style={{ backgroundImage: `url(${ctaBg})` }}>
+            <div className="cta-overlay"></div>
             <div className="cta-stars-bg"></div>
 
             {/* Decorative Stars matching the image vibe */}
@@ -18,22 +20,20 @@ const CTA = () => {
 
             <div className="container relative z-10 cta-container">
                 <div className="cta-content reveal">
-                    <h2 className="cta-title">Ready to Get<br />Started?</h2>
+                    <h3 className="cta-title">Ready to Get<br />Started?</h3>
                     <br />
                     <Link to="/contact" className="btn btn-primary cta-btn">
                         Discuss a Project
                     </Link>
                 </div>
+            </div>
 
-                <div className="cta-rocket-wrapper delay-2">
-                    {/* Using an open source 3d rocket representation */}
-                    <img
-                        src="https://raw.githubusercontent.com/Annihilator708/spaceship/master/assets/rocket.png"
-                        alt="Rocket"
-                        className="cta-rocket-img"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                </div>
+            <div className="cta-rocket-wrapper delay-2">
+                <img
+                    src={rocketImg}
+                    alt="Rocket"
+                    className="cta-rocket-img"
+                />
             </div>
         </section>
     );

@@ -13,17 +13,11 @@
     color: white;
 }
 
-.cta-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
 
 .cta-content {
     text-align: center;
     z-index: 20;
-    margin-top: 40px;
+    margin-top: 200px;
 }
 
 .cta-title {
@@ -67,40 +61,53 @@
     pointer-events: none;
 }
 
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.cta-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* height: 100%; */
+    /* background: radial-gradient(circle at 50% 50%, rgba(6, 9, 24, 0.3) 0%, rgba(6, 9, 24, 0.8) 100%); */
+    backdrop-filter: blur(3px);
+    z-index: 1;
+}
+
 .cta-rocket-wrapper {
     position: absolute;
-    top: 50px;
-    left: 20%;
+    bottom: -180px;
+    left: -5%;
     transform: rotate(45deg);
-    animation: floatRocket 6s ease-in-out infinite;
-    z-index: 15;
+    animation: floatRocket 18s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: none;
 }
 
 .cta-rocket-img {
-    width: 400px;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+    width: 680px;
+    height: auto;
+    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.9)) brightness(1.2);
+    opacity: 1;
 }
 
 @keyframes floatRocket {
 
     0%,
     100% {
-        transform: rotate(45deg) translateY(0) translateX(0);
+        transform: rotate(45deg) translateY(0) translateX(0) scale(1);
     }
 
     50% {
-        transform: rotate(45deg) translateY(-20px) translateX(20px);
+        transform: rotate(48deg) translateY(-80px) translateX(40px) scale(1.03);
     }
-}
-
-.cta-glow-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, #060918 0%, transparent 40%, #060918 100%);
-    z-index: 2;
 }
 
 /* Sparkles Decoration */
@@ -160,12 +167,13 @@
     }
 
     .cta-rocket-wrapper {
-        width: 200px;
-        left: 5%;
+        width: auto;
+        bottom: -80px;
+        left: -10%;
     }
 
     .cta-rocket-img {
-        width: 250px;
+        width: 400px;
     }
 
     .cta-globe-img {
@@ -175,11 +183,25 @@
 
 @media (max-width: 600px) {
     .cta-title {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .cta-section {
-        min-height: 600px;
+        min-height: 500px;
         padding-top: 80px;
+    }
+
+    .cta-rocket-wrapper {
+        top: 10%;
+        bottom: -40px;
+        left: -25%;
+    }
+
+    .cta-rocket-img {
+        width: 250px;
+    }
+
+    .cta-btn {
+        margin-top: 0px !important;
     }
 }
