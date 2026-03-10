@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import logoLight from '../assets/codefox-logo.png';
 import logoDark from '../assets/codefox-write-logo.png';
@@ -45,6 +45,17 @@ const Header = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
+        {
+            name: 'Web & System',
+            path: '/#',
+            dropdown: [
+                { name: 'Custom Web Development', path: '/#services' },
+                { name: 'WordPress Web Development', path: '/#services' },
+                { name: 'Shopify Web Development', path: '/#services' },
+                { name: 'E-commerce Web Development', path: '/#services' },
+                { name: 'Custom Software Development', path: '/#services' },
+            ]
+        },
         { name: 'Services', path: '/#services' },
         { name: 'Portfolio', path: '/#portfolio' },
         { name: 'About Us', path: '/about' },
@@ -61,8 +72,29 @@ const Header = () => {
                 <nav className="desktop-nav">
                     <ul className="nav-list">
                         {navLinks.map((link, idx) => (
-                            <li key={idx}>
-                                {link.path.startsWith('/#') && location.pathname === '/' ? (
+                            <li key={idx} className={link.dropdown ? 'dropdown' : ''}>
+                                {link.dropdown ? (
+                                    <>
+                                        <div className="nav-link" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '4px' }}>
+                                            {link.name} <ChevronDown size={16} />
+                                        </div>
+                                        <ul className="dropdown-menu">
+                                            {link.dropdown.map((sub, i) => (
+                                                <li key={i}>
+                                                    {sub.path.startsWith('/#') && location.pathname === '/' ? (
+                                                        <a href={sub.path.substring(1)} className="dropdown-item" onClick={closeMenu}>
+                                                            {sub.name}
+                                                        </a>
+                                                    ) : (
+                                                        <Link to={sub.path} className="dropdown-item" onClick={closeMenu}>
+                                                            {sub.name}
+                                                        </Link>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                ) : link.path.startsWith('/#') && location.pathname === '/' ? (
                                     <a href={link.path.substring(1)} className="nav-link">
                                         {link.name}
                                     </a>
@@ -79,7 +111,7 @@ const Header = () => {
                         {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
 
-                    <Link to="/#contact" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }}>
+                    <Link to="/contact" className="btn btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }}>
                         Contact Us
                     </Link>
                 </nav>
@@ -98,14 +130,31 @@ const Header = () => {
                 <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
                     <ul className="mobile-nav-list">
                         {navLinks.map((link, idx) => (
-                            <li key={idx}>
-                                <Link to={link.path} className="mobile-nav-link" onClick={closeMenu}>
-                                    {link.name}
-                                </Link>
+                            <li key={idx} style={{ width: '100%', textAlign: 'center' }}>
+                                {link.dropdown ? (
+                                    <>
+                                        <div className="mobile-nav-link" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                                            {link.name} <ChevronDown size={20} />
+                                        </div>
+                                        <ul className="mobile-dropdown-menu">
+                                            {link.dropdown.map((sub, i) => (
+                                                <li key={i}>
+                                                    <Link to={sub.path} className="mobile-dropdown-item" onClick={closeMenu}>
+                                                        {sub.name}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                ) : (
+                                    <Link to={link.path} className="mobile-nav-link" onClick={closeMenu}>
+                                        {link.name}
+                                    </Link>
+                                )}
                             </li>
                         ))}
                         <li>
-                            <Link to="/#contact" className="btn btn-primary mobile-btn" onClick={closeMenu}>
+                            <Link to="/contact" className="btn btn-primary mobile-btn" onClick={closeMenu}>
                                 Contact Us
                             </Link>
                         </li>

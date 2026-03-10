@@ -152,9 +152,9 @@ DAT.Globe = function (container, opts) {
 
     container.addEventListener('mousedown', onMouseDown, false);
 
-    container.addEventListener('mousewheel', onMouseWheel, false);
-
-    document.addEventListener('keydown', onDocumentKeyDown, false);
+    // Zooming disabled per user request
+    // container.addEventListener('mousewheel', onMouseWheel, false);
+    // document.addEventListener('keydown', onDocumentKeyDown, false);
 
     window.addEventListener('resize', onWindowResize, false);
 
@@ -404,6 +404,7 @@ DAT.Globe = function (container, opts) {
   this.createPoints = createPoints;
   this.renderer = renderer;
   this.scene = scene;
+  this.target = target;
 
   return this;
 
