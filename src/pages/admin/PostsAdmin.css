@@ -1,0 +1,93 @@
+.post-thumbnail {
+    width: 70px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.post-thumbnail.placeholder {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition-fast);
+}
+
+.status-badge.published {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.published:hover {
+    background: rgba(16, 185, 129, 0.25);
+}
+
+.status-badge.draft {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-badge.draft:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+/* Modal specifically optimized for wider blog post form */
+.post-modal {
+    max-width: 700px !important;
+}
+
+.admin-form textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+    resize: vertical;
+}
+
+.admin-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(147, 51, 234, 0.05);
+}
+
+.image-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+}
+
+.image-preview {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.file-input {
+    flex-grow: 1;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
