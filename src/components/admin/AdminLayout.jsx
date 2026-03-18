@@ -26,19 +26,19 @@ const AdminLayout = () => {
                     <h2>CodeFox<span className="text-gradient"> CRM</span></h2>
                 </div>
                 <nav className="admin-nav">
-                    <NavLink to="/admin/dashboard" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                    <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <LayoutDashboard size={20} />
                         <span>Dashboard</span>
                     </NavLink>
-                    <NavLink to="/admin/contacts" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                    <NavLink to="/admin/contacts" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <Mail size={20} />
                         <span>Contacts</span>
                     </NavLink>
-                    <NavLink to="/admin/posts" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                    <NavLink to="/admin/posts" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <FileText size={20} />
                         <span>Blog Posts</span>
                     </NavLink>
-                    <NavLink to="/admin/users" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                    <NavLink to="/admin/users" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <Users size={20} />
                         <span>Users</span>
                     </NavLink>
@@ -48,7 +48,7 @@ const AdminLayout = () => {
                         <LogOut size={20} />
                         <span>Logout</span>
                     </button>
-                    <button onClick={() => navigate('/')} className="logout-btn mt-2" style={{opacity: 0.7}}>
+                    <button onClick={() => window.open('/', '_blank')} className="logout-btn mt-2" style={{ opacity: 0.7 }}>
                         <ExternalLink size={20} />
                         <span>Back to Site</span>
                     </button>
