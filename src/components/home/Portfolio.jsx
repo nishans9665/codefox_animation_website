@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
+import satelliteImg from '../../assets/Satellite.png';
 import './Portfolio.css';
 
 const projects = [
@@ -51,8 +52,13 @@ const Portfolio = () => {
         : projects.filter(p => p.category === activeTab);
 
     return (
-        <section className="section portfolio-section" id="portfolio">
-            <div className="container">
+        <section className="section portfolio-section" id="portfolio" style={{ position: 'relative' }}>
+            {/* The floating satellite image positioned between Services and Portfolio */}
+            <div className="portfolio-satellite-wrapper">
+                <img src={satelliteImg} alt="Satellite" className="portfolio-satellite-img" />
+            </div>
+
+            <div className="container" style={{ position: 'relative', zIndex: 5 }}>
                 <div className="section-header reveal">
                     <span className="subtitle">Our Work</span>
                     <h2 className="section-title">Completed <span className="text-gradient">Projects</span></h2>

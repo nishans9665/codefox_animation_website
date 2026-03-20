@@ -110,6 +110,35 @@
     }
 }
 
+.cta-astronaut-wrapper {
+    position: absolute;
+    top: 35px;
+    right: 5%;
+    transform: rotate(-15deg);
+    animation: floatAstronaut 22s ease-in-out infinite;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.cta-astronaut-img {
+    width: 400px;
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+    opacity: 0.9;
+}
+
+@keyframes floatAstronaut {
+
+    0%,
+    100% {
+        transform: rotate(-15deg) translateY(0) translateX(0) scale(1);
+    }
+
+    50% {
+        transform: rotate(-5deg) translateY(60px) translateX(-30px) scale(0.95);
+    }
+}
+
 /* Sparkles Decoration */
 .cta-sparkle {
     position: absolute;
@@ -176,6 +205,15 @@
         width: 400px;
     }
 
+    .cta-astronaut-wrapper {
+        top: 20px;
+        right: -5%;
+    }
+
+    .cta-astronaut-img {
+        width: 300px;
+    }
+
     .cta-globe-img {
         width: 150%;
     }
@@ -199,6 +237,15 @@
 
     .cta-rocket-img {
         width: 250px;
+    }
+
+    .cta-astronaut-wrapper {
+        top: 10px;
+        right: -10%;
+    }
+
+    .cta-astronaut-img {
+        width: 180px;
     }
 
     .cta-btn {

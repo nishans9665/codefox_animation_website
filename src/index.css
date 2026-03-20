@@ -259,3 +259,13 @@ img {
     font-size: 2rem !important;
   }
 }
+
+/* Make all homepage sections completely transparent so the global space/starfield renders beautifully backwards */
+.services-section,
+.portfolio-section,
+.news-section,
+.footer-wrap,
+footer,
+.site-footer {
+  background-color: transparent !important;
+}

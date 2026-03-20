@@ -155,3 +155,41 @@
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
+
+.portfolio-satellite-wrapper {
+    position: absolute;
+    top: -90px;
+    /* Positions it perfectly between Services and Portfolio */
+    left: 8%;
+    z-index: 0;
+    pointer-events: none;
+    animation: floatSatellite 25s ease-in-out infinite alternate;
+}
+
+.portfolio-satellite-img {
+    width: 320px;
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7));
+    opacity: 0.9;
+}
+
+@keyframes floatSatellite {
+    0% {
+        transform: rotate(15deg) translateY(0) translateX(0);
+    }
+
+    100% {
+        transform: rotate(25deg) translateY(-60px) translateX(40px);
+    }
+}
+
+@media (max-width: 900px) {
+    .portfolio-satellite-wrapper {
+        top: -50px;
+        left: -15%;
+    }
+
+    .portfolio-satellite-img {
+        width: 200px;
+    }
+}

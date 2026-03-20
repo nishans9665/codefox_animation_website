@@ -6,7 +6,9 @@ import './Hero.css';
 
 const Hero = () => {
     return (
-        <section className="hero-section" id="home">
+        <section className="hero-section" id="home" style={{ position: 'relative' }}>
+            {/* The space/starfield background has been moved globally to Home.jsx! */}
+            
             {/* Background decorations */}
             <div className="hero-bg-shapes">
                 <div className="shape shape-1"></div>
@@ -14,7 +16,7 @@ const Hero = () => {
                 <div className="shape shape-3"></div>
             </div>
 
-            <div className="container hero-container">
+            <div className="container hero-container" style={{ position: 'relative', zIndex: 1 }}>
                 <div className="hero-content">
                     <div className="badge animate-fade-in-up">
                         <Rocket size={16} className="badge-icon" />
