@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import ctaBg from '../../assets/cta-section-bg-image.png';
 import rocketImg from '../../assets/view-3d-space-rocket-model.webp';
+import astronautImg from '../../assets/Space man astronaut flying.png';
 import './CTA.css';
 
 const CTA = () => {
@@ -33,6 +34,14 @@ const CTA = () => {
                     src={rocketImg}
                     alt="Rocket"
                     className="cta-rocket-img"
+                />
+            </div>
+
+            <div className="cta-astronaut-wrapper delay-1">
+                <img
+                    src={astronautImg}
+                    alt="Astronaut"
+                    className="cta-astronaut-img"
                 />
             </div>
         </section>
