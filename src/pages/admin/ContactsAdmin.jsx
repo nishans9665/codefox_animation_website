@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MailOpen, Mail, Trash2, Calendar, ChevronLeft, ChevronRight, X, Loader } from 'lucide-react';
+import { Search, MailOpen, Mail, Trash2, Calendar, ChevronLeft, ChevronRight, X, Loader, Download, FileText } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import './ContactsAdmin.css';
@@ -93,20 +95,102 @@ const ContactsAdmin = () => {
 
     const closeModal = () => setSelectedContact(null);
 
+    const handleExport = async (format) => {
+        const toastId = toast.loading(`Preparing ${format.toUpperCase()} export...`);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get(`${API_URL}?page=1&limit=5000&search=${searchTerm}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            const exportData = res.data.data || res.data;
+            if(!exportData || exportData.length === 0) {
+                toast.error("No data to export", { id: toastId });
+                return;
+            }
+
+            if (format === 'csv') {
+                const headers = ['Status', 'Name', 'Email', 'Phone', 'Subject', 'Date'];
+                const rows = exportData.map(c => [
+                    c.is_read ? 'Read' : 'Unread',
+                    `"${c.full_name?.replace(/"/g, '""') || ''}"`,
+                    c.email || '',
+                    c.phone || 'N/A',
+                    `"${c.subject?.replace(/"/g, '""') || ''}"`,
+                    new Date(c.created_at).toLocaleDateString()
+                ]);
+                
+                let csvContent = 'data:text/csv;charset=utf-8,' 
+                    + headers.join(',') + '\n'
+                    + rows.map(e => e.join(',')).join('\n');
+                    
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "codefox_contacts_export.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                toast.success('CSV Exported Successfully', { id: toastId });
+            } else if (format === 'pdf') {
+                const doc = new jsPDF();
+                doc.text("CodeFox - Contact Submissions", 14, 15);
+                
+                const tableColumn = ["Status", "Name", "Email", "Subject", "Date"];
+                const tableRows = [];
+
+                exportData.forEach(c => {
+                    const rowData = [
+                        c.is_read ? 'Read' : 'Unread',
+                        c.full_name,
+                        c.email,
+                        c.subject,
+                        new Date(c.created_at).toLocaleDateString()
+                    ];
+                    tableRows.push(rowData);
+                });
+
+                autoTable(doc, {
+                    head: [tableColumn],
+                    body: tableRows,
+                    startY: 20,
+                });
+                
+                doc.save('codefox_contacts_export.pdf');
+                toast.success('PDF Exported Successfully', { id: toastId });
+            }
+        } catch (error) {
+            console.error("Export Error:", error);
+            toast.error("Failed to export data", { id: toastId });
+        }
+    };
+
     return (
         <div className="admin-page contacts-admin">
-            <div className="admin-header flex-between">
-                <div>
-                    <h2>Contact Submissions</h2>
-                    <p>Manage and respond to all inquiries sent from the website contact form.</p>
+            <div className="admin-header">
+                <div className="flex-between w-full mb-4">
+                    <div>
+                        <h2>Contact Submissions</h2>
+                        <p>Manage and respond to all inquiries sent from the website contact form.</p>
+                    </div>
+                    <div className="action-buttons flex gap-3">
+                        <button className="btn btn-outline flex-center gap-2" onClick={() => handleExport('csv')} title="Export to CSV">
+                            <Download size={18} /> CSV
+                        </button>
+                        <button className="btn btn-outline flex-center gap-2" onClick={() => handleExport('pdf')} title="Export to PDF">
+                            <FileText size={18} /> PDF
+                        </button>
+                    </div>
                 </div>
-                <div className="search-bar">
-                    <Search size={18} className="search-icon" />
+                <div className="search-bar" style={{ maxWidth: '400px', marginTop: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', background: 'var(--bg-card)', padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--card-border)' }}>
+                    <Search size={18} className="text-secondary" style={{ marginRight: '10px' }} />
                     <input 
                         type="text" 
                         placeholder="Search name or email..." 
                         value={searchTerm}
                         onChange={handleSearch}
+                        style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-primary)', width: '100%', fontFamily: 'inherit' }}
                     />
                 </div>
             </div>
@@ -243,7 +327,7 @@ const ContactsAdmin = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-footer">
+                        <div className="modal-footer" style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--card-border, rgba(255,255,255,0.05))', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                             <button className="btn btn-outline" onClick={closeModal}>Close Details</button>
                             <button className="btn btn-primary" onClick={() => window.location.href=`mailto:${selectedContact.email}?subject=Re: ${selectedContact.subject}`}>
                                 Reply via Email

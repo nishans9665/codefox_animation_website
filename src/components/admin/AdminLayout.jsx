@@ -38,6 +38,10 @@ const AdminLayout = () => {
                         <FileText size={20} />
                         <span>Blog Posts</span>
                     </NavLink>
+                    <NavLink to="/admin/projects" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+                        <LayoutDashboard size={20} />
+                        <span>Projects</span>
+                    </NavLink>
                     <NavLink to="/admin/users" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                         <Users size={20} />
                         <span>Users</span>
@@ -54,7 +58,7 @@ const AdminLayout = () => {
                     </button>
                 </div>
             </aside>
-            <main className="admin-content">
+            <main className="admin-content" data-lenis-prevent>
                 <Outlet />
             </main>
         </div>

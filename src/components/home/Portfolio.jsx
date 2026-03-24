@@ -1,55 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import satelliteImg from '../../assets/Satellite.png';
 import './Portfolio.css';
-
-const projects = [
-    {
-        id: 1,
-        title: 'FinTech Dashboard',
-        category: 'Web',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-        id: 2,
-        title: 'HealthCare Mobile App',
-        category: 'App',
-        image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-        id: 3,
-        title: 'E-Commerce Platform',
-        category: 'Web',
-        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-        id: 4,
-        title: 'Smart Home IoT System',
-        category: 'Software',
-        image: 'https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-        id: 5,
-        title: 'Real Estate Portal',
-        category: 'Web',
-        image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-        id: 6,
-        title: 'Crypto Wallet App',
-        category: 'App',
-        image: 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    }
-];
 
 const categories = ['All', 'Web', 'App', 'Software'];
 
 const Portfolio = () => {
     const [activeTab, setActiveTab] = useState('All');
+    const [projects, setProjects] = useState([]);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/projects');
+                setProjects(res.data);
+            } catch (error) {
+                console.error("Failed to fetch projects");
+            }
+        };
+        fetchProjects();
+    }, []);
 
     const filteredProjects = activeTab === 'All'
         ? projects
         : projects.filter(p => p.category === activeTab);
+
+    // Limit to exactly 12 projects max (4 columns x 3 rows ideally)
+    const displayedProjects = filteredProjects.slice(0, 12);
 
     return (
         <section className="section portfolio-section" id="portfolio" style={{ position: 'relative' }}>
@@ -80,19 +59,27 @@ const Portfolio = () => {
                 </div>
 
                 <div className="portfolio-grid">
-                    {filteredProjects.map((project, idx) => (
+                    {displayedProjects.length === 0 ? (
+                        <p className="text-secondary text-center" style={{gridColumn: '1 / -1', padding: '2rem'}}>No projects completed in this category yet.</p>
+                    ) : displayedProjects.map((project, idx) => (
                         <div
-                            className="portfolio-card reveal glass-panel"
+                            className="portfolio-card glass-panel"
                             key={project.id}
-                            style={{ transitionDelay: `${idx * 0.1}s` }}
+                            style={{ transitionDelay: `${idx * 0.05}s`, animation: 'fadeInUp 0.6s ease forwards' }}
                         >
                             <div className="portfolio-image-wrap">
-                                <img src={project.image} alt={project.title} className="portfolio-image" />
+                                <img src={project.image && project.image.startsWith('http') ? project.image : (project.image ? `http://localhost:5000${project.image}` : '')} alt={project.title} className="portfolio-image" />
                                 <div className="portfolio-overlay">
-                                    <button className="btn btn-primary btn-icon">
-                                        <ExternalLink size={20} />
-                                    </button>
-                                    <p className="overlay-text">View Details</p>
+                                    {project.project_url ? (
+                                        <a href={project.project_url} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-icon">
+                                            <ExternalLink size={20} />
+                                        </a>
+                                    ) : (
+                                        <button className="btn btn-primary btn-icon">
+                                            <ExternalLink size={20} />
+                                        </button>
+                                    )}
+                                    <p className="overlay-text">{project.project_url ? 'Visit Project' : 'View Details'}</p>
                                 </div>
                             </div>
                             <div className="portfolio-content">
@@ -104,7 +91,7 @@ const Portfolio = () => {
                 </div>
 
                 <div className="portfolio-action reveal" style={{ transitionDelay: '0.4s' }}>
-                    <button className="btn btn-secondary load-more">View All Projects</button>
+                    <Link to="/portfolio" className="btn btn-secondary load-more">View All Projects</Link>
                 </div>
             </div>
         </section>
