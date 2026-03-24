@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import SinglePost from './pages/SinglePost';
+import PortfolioPage from './pages/PortfolioPage';
 import { Toaster } from 'react-hot-toast';
 
 // Admin Pages
@@ -16,7 +17,7 @@ import AdminLogin from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import UsersAdmin from './pages/admin/UsersAdmin';
 import PostsAdmin from './pages/admin/PostsAdmin';
-
+import ProjectsAdmin from './pages/admin/ProjectsAdmin';
 import ContactsAdmin from './pages/admin/ContactsAdmin';
 
 // Dummy components to avoid breaking imports for CRM features yet to be fully coded on frontend
@@ -68,6 +69,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/portfolio" element={<PortfolioPage />} />
           <Route path="/post/:slug" element={<SinglePost />} />
         </Route>
 
@@ -77,6 +79,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="contacts" element={<ContactsAdmin />} />
           <Route path="posts" element={<PostsAdmin />} />
+          <Route path="projects" element={<ProjectsAdmin />} />
           <Route path="users" element={<UsersAdmin />} />
         </Route>
       </Routes>

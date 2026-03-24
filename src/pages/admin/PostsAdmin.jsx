@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import './PostsAdmin.css';
 
@@ -23,6 +23,27 @@ const PostsAdmin = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const fileInputRef = useRef(null);
+
+    // Filter & Pagination State
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 100;
+
+    const filteredPosts = posts.filter(p => 
+        p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        p.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredPosts.length / itemsPerPage) || 1;
+    const paginatedPosts = filteredPosts.slice(
+        (currentPage - 1) * itemsPerPage, 
+        currentPage * itemsPerPage
+    );
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    };
 
     const fetchPosts = async () => {
         try {
@@ -176,14 +197,27 @@ const PostsAdmin = () => {
 
     return (
         <div className="admin-page">
-            <div className="admin-header flex-between">
-                <div>
-                    <h2>Blog Posts</h2>
-                    <p>Manage, write, and publish articles directly to the CodeFox IT homepage.</p>
+            <div className="admin-header">
+                <div className="flex-between w-full mb-4">
+                    <div>
+                        <h2>Blog Posts</h2>
+                        <p>Manage, write, and publish articles directly to the CodeFox IT homepage.</p>
+                    </div>
+                    <button className="btn btn-primary flex-center gap-2" onClick={() => openModal()}>
+                        <Plus size={18} /> Write New Post
+                    </button>
                 </div>
-                <button className="btn btn-primary flex-center gap-2" onClick={() => openModal()}>
-                    <Plus size={18} /> Write New Post
-                </button>
+                
+                <div className="search-bar" style={{ maxWidth: '400px', marginTop: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', background: 'var(--bg-card)', padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--card-border)' }}>
+                    <Search size={18} className="text-secondary" style={{ marginRight: '10px' }} />
+                    <input 
+                        type="text" 
+                        placeholder="Search posts by title or category..." 
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-primary)', width: '100%', fontFamily: 'inherit' }}
+                    />
+                </div>
             </div>
 
             <div className="glass-panel table-container">
@@ -198,7 +232,7 @@ const PostsAdmin = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {posts.map(post => (
+                        {paginatedPosts.map(post => (
                             <tr key={post.id}>
                                 <td style={{width: '90px'}}>
                                     {post.image ? (
@@ -238,15 +272,38 @@ const PostsAdmin = () => {
                                 </td>
                             </tr>
                         ))}
-                        {posts.length === 0 && (
+                        {paginatedPosts.length === 0 && (
                             <tr>
                                 <td colSpan="5" className="text-center py-4 text-secondary">
-                                    No blog posts found. Write your first article today!
+                                    {searchTerm ? 'No posts match your search.' : 'No blog posts found. Write your first article today!'}
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="pagination" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', padding: '1.5rem', borderTop: '1px solid var(--card-border)' }}>
+                        <button 
+                            className="btn-pagination" 
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(p => p - 1)}
+                            style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === 1 ? 'transparent' : 'var(--accent-primary)', color: currentPage === 1 ? 'var(--text-secondary)' : '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === 1 ? 0.5 : 1 }}
+                        >
+                            <ChevronLeft size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} /> Prev
+                        </button>
+                        <span className="page-info font-medium" style={{ color: 'var(--text-primary)' }}>Page {currentPage} of {totalPages}</span>
+                        <button 
+                            className="btn-pagination" 
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(p => p + 1)}
+                            style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === totalPages ? 'transparent' : 'var(--accent-primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === totalPages ? 0.5 : 1 }}
+                        >
+                            Next <ChevronRight size={18} style={{ display: 'inline', verticalAlign: 'middle', marginLeft: '5px' }} />
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Modal for Add / Edit */}

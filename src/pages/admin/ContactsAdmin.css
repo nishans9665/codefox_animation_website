@@ -1,21 +1,25 @@
 .contacts-admin .search-bar input {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.85rem 1rem 0.85rem 2.5rem;
+  /* padding: 0.85rem 1rem 0.85rem 2.5rem; */
   border-radius: var(--radius-md);
   color: white;
   width: 300px;
   font-size: 0.95rem;
   transition: all var(--transition-fast);
 }
+
 .contacts-admin .search-bar input:focus {
   outline: none;
   border-color: var(--primary);
-  background: rgba(255, 138, 0, 0.05); /* Orange hint */
+  background: rgba(255, 138, 0, 0.05);
+  /* Orange hint */
 }
+
 .contacts-admin .search-bar {
   position: relative;
 }
+
 .contacts-admin .search-icon {
   position: absolute;
   left: 0.75rem;
@@ -27,6 +31,7 @@
 .contacts-admin .unread-row {
   background: rgba(255, 138, 0, 0.05) !important;
 }
+
 .contacts-admin .unread-row td:first-child {
   border-left: 3px solid var(--primary);
 }
@@ -41,11 +46,13 @@
   font-weight: 700;
   border: 1px solid transparent;
 }
+
 .badge-warning {
   background: rgba(255, 138, 0, 0.15);
   color: #ff8a00;
   border-color: rgba(255, 138, 0, 0.3);
 }
+
 .badge-success {
   background: rgba(72, 187, 120, 0.15);
   color: #48bb78;
@@ -73,13 +80,16 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
-.info-group label, .message-box label {
+
+.info-group label,
+.message-box label {
   display: block;
   font-size: 0.75rem;
   text-transform: uppercase;
   color: #a0aec0;
   margin-bottom: 0.25rem;
 }
+
 .info-group p {
   font-weight: 500;
   color: #fff;
@@ -94,11 +104,13 @@
   overflow-y: auto;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .message-content p {
   margin-bottom: 1rem;
   color: #e2e8f0;
   line-height: 1.6;
 }
+
 .message-content p:last-child {
   margin-bottom: 0;
 }
