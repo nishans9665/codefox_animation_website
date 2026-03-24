@@ -1,0 +1,109 @@
+.contacts-admin .search-bar input {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem 1rem 0.85rem 2.5rem;
+  border-radius: var(--radius-md);
+  color: white;
+  width: 300px;
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+}
+.contacts-admin .search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(255, 138, 0, 0.05); /* Orange hint */
+}
+.contacts-admin .search-bar {
+  position: relative;
+}
+.contacts-admin .search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0aec0;
+}
+
+.contacts-admin .unread-row {
+  background: rgba(255, 138, 0, 0.05) !important;
+}
+.contacts-admin .unread-row td:first-child {
+  border-left: 3px solid var(--primary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+.badge-warning {
+  background: rgba(255, 138, 0, 0.15);
+  color: #ff8a00;
+  border-color: rgba(255, 138, 0, 0.3);
+}
+.badge-success {
+  background: rgba(72, 187, 120, 0.15);
+  color: #48bb78;
+  border-color: rgba(72, 187, 120, 0.3);
+}
+
+.truncate-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.date-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a0aec0;
+  font-size: 0.875rem;
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.info-group label, .message-box label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #a0aec0;
+  margin-bottom: 0.25rem;
+}
+.info-group p {
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+}
+
+.message-content {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.message-content p {
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.contact-modal {
+  max-width: 600px;
+  width: 90%;
+}
