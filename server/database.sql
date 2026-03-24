@@ -35,7 +35,17 @@ CREATE TABLE IF NOT EXISTS posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Initial Demo Administrator User
+-- 4. Projects (Blog) Table
+CREATE TABLE IF NOT EXISTS projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    project_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Initial Demo Administrator User
 -- The password generated here evaluates to: admin123
 INSERT INTO users (name, email, password, role) 
 VALUES ('CodeFox Admin', 'admin@codefoxit.com', '$2b$10$H/AOAjtzEYKv6YUXFGaVcOF.FeiPI4trQdCOOHcEZJOBUL7EGlm5ojC', 'Admin');
