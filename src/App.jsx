@@ -17,6 +17,8 @@ import Dashboard from './pages/admin/Dashboard';
 import UsersAdmin from './pages/admin/UsersAdmin';
 import PostsAdmin from './pages/admin/PostsAdmin';
 
+import ContactsAdmin from './pages/admin/ContactsAdmin';
+
 // Dummy components to avoid breaking imports for CRM features yet to be fully coded on frontend
 const DummyAdminPage = ({title}) => (
     <div className="admin-page">
@@ -73,7 +75,7 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="contacts" element={<DummyAdminPage title="Contact Submissions" />} />
+          <Route path="contacts" element={<ContactsAdmin />} />
           <Route path="posts" element={<PostsAdmin />} />
           <Route path="users" element={<UsersAdmin />} />
         </Route>

@@ -23,8 +23,18 @@ const Dashboard = () => {
                     axios.get('http://localhost:5000/api/users', config).catch(() => ({data: []}))
                 ]);
 
+                // Extract contact count accurately whether the backend responds with paginated data or an array
+                let contactsCount = 0;
+                if (contactsRes.data && contactsRes.data.pagination) {
+                    contactsCount = contactsRes.data.pagination.total;
+                } else if (Array.isArray(contactsRes.data)) {
+                    contactsCount = contactsRes.data.length;
+                } else if (contactsRes.data && Array.isArray(contactsRes.data.data)) {
+                    contactsCount = contactsRes.data.data.length;
+                }
+
                 setStats({
-                    contacts: contactsRes.data.length || 0,
+                    contacts: contactsCount,
                     posts: postsRes.data.length || 0,
                     users: usersRes.data.length || 0
                 });
