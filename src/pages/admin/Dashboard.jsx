@@ -19,10 +19,10 @@ const Dashboard = () => {
                 const config = { headers: { Authorization: `Bearer ${token}` } };
                 
                 const [contactsRes, postsRes, usersRes, projectsRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/contacts', config).catch(() => ({data: []})),
-                    axios.get('http://localhost:5000/api/posts/admin', config).catch(() => ({data: []})),
-                    axios.get('http://localhost:5000/api/users', config).catch(() => ({data: []})),
-                    axios.get('http://localhost:5000/api/projects', config).catch(() => ({data: []}))
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/contacts`, config).catch(() => ({data: []})),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/admin`, config).catch(() => ({data: []})),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, config).catch(() => ({data: []})),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects`, config).catch(() => ({data: []}))
                 ]);
 
                 // Extract contact count accurately whether the backend responds with paginated data or an array

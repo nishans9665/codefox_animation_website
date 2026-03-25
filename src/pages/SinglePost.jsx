@@ -14,7 +14,7 @@ const SinglePost = () => {
         window.scrollTo(0, 0); // Reset scroll position when loading a new post
         
         // Fetch exactly one post based on the slug URL
-        axios.get(`http://localhost:5000/api/posts/article/${slug}`)
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/article/${slug}`)
             .then(res => {
                 setPost(res.data);
                 setLoading(false);
@@ -45,7 +45,7 @@ const SinglePost = () => {
     }
 
     const imageUrl = post.image 
-        ? (post.image.startsWith('http') ? post.image : `http://localhost:5000${post.image}`)
+        ? (post.image.startsWith('http') ? post.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}`)
         : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
 
     // Split text by newlines and create paragraphs cleanly.

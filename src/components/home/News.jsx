@@ -40,7 +40,7 @@ const News = () => {
 
     useEffect(() => {
         // Fetch published posts from the backend CRM
-        axios.get('http://localhost:5000/api/posts')
+        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
                     setNewsItems(res.data.slice(0, 3)); // Max 3 items on homepage grid
@@ -54,7 +54,7 @@ const News = () => {
     const resolveImage = (imgSrc) => {
         if (!imgSrc) return "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80";
         if (imgSrc.startsWith('http')) return imgSrc;
-        return `http://localhost:5000${imgSrc}`; // Process local uploaded image paths correctly
+        return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${imgSrc}`; // Process local uploaded image paths correctly
     };
 
     return (

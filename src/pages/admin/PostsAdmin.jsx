@@ -48,7 +48,7 @@ const PostsAdmin = () => {
     const fetchPosts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/posts/admin', {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/admin`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPosts(res.data);
@@ -98,7 +98,7 @@ const PostsAdmin = () => {
                 content: post.content,
                 status: post.status
             });
-            setImagePreview(post.image ? `http://localhost:5000${post.image}` : '');
+            setImagePreview(post.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}` : '');
             setImageFile(null);
         } else {
             setEditingPost(null);
@@ -140,10 +140,10 @@ const PostsAdmin = () => {
 
         try {
             if (editingPost) {
-                await axios.put(`http://localhost:5000/api/posts/${editingPost.id}`, data, config);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${editingPost.id}`, data, config);
                 toast.success("Blog post updated successfully!");
             } else {
-                await axios.post('http://localhost:5000/api/posts', data, config);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`, data, config);
                 toast.success("New blog post published!");
             }
             closeModal();
@@ -160,7 +160,7 @@ const PostsAdmin = () => {
         
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5000/api/posts/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success("Post deleted permanently");
@@ -181,7 +181,7 @@ const PostsAdmin = () => {
         data.append('status', newStatus);
 
         try {
-            await axios.put(`http://localhost:5000/api/posts/${post.id}`, data, {
+            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${post.id}`, data, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
             });
             toast.success(`Post marked as ${newStatus}`);

@@ -14,7 +14,7 @@ const Portfolio = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/projects');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects`);
                 setProjects(res.data);
             } catch (error) {
                 console.error("Failed to fetch projects");
@@ -68,7 +68,7 @@ const Portfolio = () => {
                             style={{ transitionDelay: `${idx * 0.05}s`, animation: 'fadeInUp 0.6s ease forwards' }}
                         >
                             <div className="portfolio-image-wrap">
-                                <img src={project.image && project.image.startsWith('http') ? project.image : (project.image ? `http://localhost:5000${project.image}` : '')} alt={project.title} className="portfolio-image" />
+                                <img src={project.image && project.image.startsWith('http') ? project.image : (project.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${project.image}` : '')} alt={project.title} className="portfolio-image" />
                                 <div className="portfolio-overlay">
                                     {project.project_url ? (
                                         <a href={project.project_url} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-icon">

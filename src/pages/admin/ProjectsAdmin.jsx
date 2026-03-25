@@ -93,7 +93,7 @@ const ProjectsAdmin = () => {
     const fetchProjects = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/projects', {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setProjects(res.data);
@@ -128,7 +128,7 @@ const ProjectsAdmin = () => {
                 category: project.category,
                 project_url: project.project_url || ''
             });
-            setImagePreview(project.image.startsWith('http') ? project.image : `http://localhost:5000${project.image}`);
+            setImagePreview(project.image.startsWith('http') ? project.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${project.image}`);
             setImageFile(null);
         } else {
             setEditingProject(null);
@@ -167,11 +167,11 @@ const ProjectsAdmin = () => {
 
         try {
             if (editingProject) {
-                await axios.put(`http://localhost:5000/api/projects/${editingProject.id}`, data, config);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects/${editingProject.id}`, data, config);
                 toast.success("Project updated successfully!");
             } else {
                 if (!imageFile) throw new Error("Image is required for new projects");
-                await axios.post('http://localhost:5000/api/projects', data, config);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects`, data, config);
                 toast.success("New project added to portfolio!");
             }
             closeModal();
@@ -188,7 +188,7 @@ const ProjectsAdmin = () => {
 
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5000/api/projects/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/projects/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success("Project deleted permanently");
@@ -249,7 +249,7 @@ const ProjectsAdmin = () => {
                             <tr key={project.id}>
                                 <td style={{ width: '90px' }}>
                                     {project.image ? (
-                                        <div className="post-thumbnail" style={{ backgroundImage: `url(${project.image.startsWith('http') ? project.image : `http://localhost:5000${project.image}`})` }}></div>
+                                        <div className="post-thumbnail" style={{ backgroundImage: `url(${project.image.startsWith('http') ? project.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${project.image}`})` }}></div>
                                     ) : (
                                         <div className="post-thumbnail placeholder flex-center">
                                             <ImageIcon size={20} className="text-secondary" />

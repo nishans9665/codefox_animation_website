@@ -22,7 +22,7 @@ const UsersAdmin = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/users', {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(res.data);
@@ -66,7 +66,7 @@ const UsersAdmin = () => {
         try {
             if (editingUser) {
                 // UPDATE USER
-                await axios.put(`http://localhost:5000/api/users/${editingUser.id}`, formData, config);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${editingUser.id}`, formData, config);
                 toast.success("User updated successfully!");
             } else {
                 // CREATE USER
@@ -75,7 +75,7 @@ const UsersAdmin = () => {
                     setIsSubmitting(false);
                     return;
                 }
-                await axios.post('http://localhost:5000/api/users', formData, config);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users`, formData, config);
                 toast.success("New user created!");
             }
             closeModal();
@@ -92,7 +92,7 @@ const UsersAdmin = () => {
         
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5000/api/users/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/users/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success("User deleted");
