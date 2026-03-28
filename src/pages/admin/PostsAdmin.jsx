@@ -9,7 +9,7 @@ const PostsAdmin = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     // Form State
     const [editingPost, setEditingPost] = useState(null);
     const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const PostsAdmin = () => {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     const fileInputRef = useRef(null);
     const editor = useRef(null);
     const config = {
@@ -43,14 +43,14 @@ const PostsAdmin = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 100;
 
-    const filteredPosts = posts.filter(p => 
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const filteredPosts = posts.filter(p =>
+        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredPosts.length / itemsPerPage) || 1;
     const paginatedPosts = filteredPosts.slice(
-        (currentPage - 1) * itemsPerPage, 
+        (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
@@ -133,37 +133,39 @@ const PostsAdmin = () => {
         e.preventDefault();
         setIsSubmitting(true);
         const token = localStorage.getItem('token');
-        
+
+        const finalContent = formData.content;
+
         // Since we have file uploads, we must use FormData
         const data = new FormData();
         data.append('title', formData.title);
         data.append('slug', formData.slug);
         data.append('category', formData.category);
-        data.append('content', formData.content);
+        data.append('content', finalContent);
         data.append('status', formData.status);
         if (imageFile) {
             data.append('image', imageFile);
         }
 
-        const config = { 
-            headers: { 
+        const axiosConfig = {
+            headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
-            } 
+            }
         };
 
         try {
             if (editingPost) {
-                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${editingPost.id}`, data, config);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${editingPost.id}`, data, axiosConfig);
                 toast.success("Blog post updated successfully!");
             } else {
-                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`, data, config);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`, data, axiosConfig);
                 toast.success("New blog post published!");
             }
             closeModal();
             fetchPosts();
         } catch (error) {
-            toast.error(error.response?.data?.message || "Operation failed.");
+            toast.error(error.response?.data?.message || "Operation failed saving article.");
         } finally {
             setIsSubmitting(false);
         }
@@ -171,7 +173,7 @@ const PostsAdmin = () => {
 
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this blog post? This cannot be undone.")) return;
-        
+
         const token = localStorage.getItem('token');
         try {
             await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${id}`, {
@@ -221,12 +223,12 @@ const PostsAdmin = () => {
                         <Plus size={18} /> Write New Post
                     </button>
                 </div>
-                
+
                 <div className="search-bar" style={{ maxWidth: '400px', marginTop: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', background: 'var(--bg-card)', padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--card-border)' }}>
                     <Search size={18} className="text-secondary" style={{ marginRight: '10px' }} />
-                    <input 
-                        type="text" 
-                        placeholder="Search posts by title or category..." 
+                    <input
+                        type="text"
+                        placeholder="Search posts by title or category..."
                         value={searchTerm}
                         onChange={handleSearch}
                         style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-primary)', width: '100%', fontFamily: 'inherit' }}
@@ -248,9 +250,9 @@ const PostsAdmin = () => {
                     <tbody>
                         {paginatedPosts.map(post => (
                             <tr key={post.id}>
-                                <td style={{width: '90px'}}>
+                                <td style={{ width: '90px' }}>
                                     {post.image ? (
-                                        <div className="post-thumbnail" style={{backgroundImage: `url(http://localhost:5000${post.image})`}}></div>
+                                        <div className="post-thumbnail" style={{ backgroundImage: `url(http://localhost:5000${post.image})` }}></div>
                                     ) : (
                                         <div className="post-thumbnail placeholder flex-center">
                                             <ImageIcon size={20} className="text-secondary" />
@@ -259,11 +261,11 @@ const PostsAdmin = () => {
                                 </td>
                                 <td>
                                     <div className="font-medium">{post.title}</div>
-                                    <div className="text-secondary" style={{fontSize: '0.8rem'}}>{post.category}</div>
+                                    <div className="text-secondary" style={{ fontSize: '0.8rem' }}>{post.category}</div>
                                 </td>
                                 <td>
-                                    <button 
-                                        className={`status-badge ${post.status}`} 
+                                    <button
+                                        className={`status-badge ${post.status}`}
                                         onClick={() => toggleStatus(post)}
                                         title={post.status === 'published' ? 'Click to Unpublish' : 'Click to Publish'}
                                     >
@@ -299,8 +301,8 @@ const PostsAdmin = () => {
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
                     <div className="pagination" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', padding: '1.5rem', borderTop: '1px solid var(--card-border)' }}>
-                        <button 
-                            className="btn-pagination" 
+                        <button
+                            className="btn-pagination"
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(p => p - 1)}
                             style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === 1 ? 'transparent' : 'var(--accent-primary)', color: currentPage === 1 ? 'var(--text-secondary)' : '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === 1 ? 0.5 : 1 }}
@@ -308,8 +310,8 @@ const PostsAdmin = () => {
                             <ChevronLeft size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} /> Prev
                         </button>
                         <span className="page-info font-medium" style={{ color: 'var(--text-primary)' }}>Page {currentPage} of {totalPages}</span>
-                        <button 
-                            className="btn-pagination" 
+                        <button
+                            className="btn-pagination"
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(p => p + 1)}
                             style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === totalPages ? 'transparent' : 'var(--accent-primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === totalPages ? 0.5 : 1 }}
@@ -329,14 +331,14 @@ const PostsAdmin = () => {
                             <button className="icon-btn" onClick={closeModal}><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="admin-form">
-                            
-                            <div className="form-row" style={{display: 'flex', gap: '1.5rem'}}>
-                                <div className="form-group" style={{flex: 2}}>
+
+                            <div className="form-row" style={{ display: 'flex', gap: '1.5rem' }}>
+                                <div className="form-group" style={{ flex: 2 }}>
                                     <label>Article Title</label>
                                     <input type="text" name="title" value={formData.title} onChange={handleTitleChange} required placeholder="Top 10 Web Frameworks in 2026" />
                                 </div>
-                                
-                                <div className="form-group" style={{flex: 1}}>
+
+                                <div className="form-group" style={{ flex: 1 }}>
                                     <label>Category</label>
                                     <select name="category" value={formData.category} onChange={handleInputChange}>
                                         <option value="Technology">Technology</option>
@@ -349,7 +351,7 @@ const PostsAdmin = () => {
 
                             <div className="form-group">
                                 <label>URL Slug (auto-generated)</label>
-                                <input type="text" name="slug" value={formData.slug} onChange={handleInputChange} required style={{background: 'rgba(0,0,0,0.1)'}} />
+                                <input type="text" name="slug" value={formData.slug} onChange={handleInputChange} required style={{ background: 'rgba(0,0,0,0.1)' }} />
                             </div>
 
                             <div className="form-group" style={{ marginBottom: '20px' }}>
@@ -360,8 +362,7 @@ const PostsAdmin = () => {
                                         value={formData.content}
                                         config={config}
                                         tabIndex={1}
-                                        onBlur={newContent => setFormData(prev => ({ ...prev, content: newContent }))}
-                                        onChange={newContent => {}}
+                                        onChange={newContent => setFormData(prev => ({ ...prev, content: newContent }))}
                                     />
                                 </div>
                             </div>

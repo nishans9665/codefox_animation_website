@@ -7,7 +7,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 // Set up multer for image storage
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads/')),
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
@@ -49,7 +49,11 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
         );
         res.status(201).json({ message: 'Post created', id: result.insertId });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
+        console.error('SERVER_ERROR_POST:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: `Article with slug '${slug}' already exists. Please change the title.` });
+        }
+        res.status(500).json({ message: 'Server error saving article', error: error.message });
     }
 });
 
