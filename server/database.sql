@@ -60,3 +60,7 @@ ALTER TABLE posts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 /* 3. Increase the data size limit for the server (requires Admin/Root access) */
 SET GLOBAL max_allowed_packet=104857600; /* Sets to 100MB */
+
+
+/* Add the views column with a default of 0 */
+ALTER TABLE posts ADD COLUMN views INT DEFAULT 0;

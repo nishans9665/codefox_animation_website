@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import './PostsAdmin.css';
 import JoditEditor from 'jodit-react';
@@ -242,6 +242,7 @@ const PostsAdmin = () => {
                         <tr>
                             <th>Cover</th>
                             <th>Title & Category</th>
+                            <th className="text-center">Views</th>
                             <th>Status</th>
                             <th>Last Modified</th>
                             <th>Actions</th>
@@ -262,6 +263,12 @@ const PostsAdmin = () => {
                                 <td>
                                     <div className="font-medium">{post.title}</div>
                                     <div className="text-secondary" style={{ fontSize: '0.8rem' }}>{post.category}</div>
+                                </td>
+                                <td className="text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                        {/* <TrendingUp size={14} className="text-accent" /> */}
+                                        <span className="font-medium text-primary">{post.views || 0}</span>
+                                    </div>
                                 </td>
                                 <td>
                                     <button
@@ -290,7 +297,7 @@ const PostsAdmin = () => {
                         ))}
                         {paginatedPosts.length === 0 && (
                             <tr>
-                                <td colSpan="5" className="text-center py-4 text-secondary">
+                                <td colSpan="6" className="text-center py-4 text-secondary">
                                     {searchTerm ? 'No posts match your search.' : 'No blog posts found. Write your first article today!'}
                                 </td>
                             </tr>

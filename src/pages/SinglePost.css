@@ -35,7 +35,8 @@
 }
 
 .breadcrumb-separator {
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary);
+    opacity: 0.5;
     margin: 0 0.25rem;
 }
 
@@ -44,13 +45,13 @@
 }
 
 .post-title-simple {
-    font-family: 'Merriweather', 'Georgia', 'Times New Roman', serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 3.5rem;
-    font-weight: 500;
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
-    color: white;
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.04em;
 }
 
 .post-date-simple {
@@ -247,12 +248,13 @@
 }
 
 .widget-title {
+    font-family: 'Outfit', sans-serif;
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    color: white;
+    color: var(--text-primary);
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .related-posts-list {
@@ -292,7 +294,7 @@
 .rp-title {
     font-size: 0.95rem;
     font-weight: 600;
-    color: white;
+    color: var(--text-primary);
     line-height: 1.3;
     margin: 0;
     display: -webkit-box;
