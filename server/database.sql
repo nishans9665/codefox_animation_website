@@ -35,7 +35,32 @@ CREATE TABLE IF NOT EXISTS posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Initial Demo Administrator User
+-- 4. Projects (Blog) Table
+CREATE TABLE IF NOT EXISTS projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    project_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Initial Demo Administrator User
 -- The password generated here evaluates to: admin123
 INSERT INTO users (name, email, password, role) 
 VALUES ('CodeFox Admin', 'admin@codefoxit.com', '$2b$10$H/AOAjtzEYKv6YUXFGaVcOF.FeiPI4trQdCOOHcEZJOBUL7EGlm5ojC', 'Admin');
+
+
+
+/* 1. Set the database to support modern characters (Emojis, symbols) */
+ALTER DATABASE codefox_crm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+/* 2. Set the posts table to support these characters */
+ALTER TABLE posts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+/* 3. Increase the data size limit for the server (requires Admin/Root access) */
+SET GLOBAL max_allowed_packet=104857600; /* Sets to 100MB */
+
+
+/* Add the views column with a default of 0 */
+ALTER TABLE posts ADD COLUMN views INT DEFAULT 0;

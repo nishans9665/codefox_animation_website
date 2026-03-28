@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import './PostsAdmin.css';
+import JoditEditor from 'jodit-react';
 
 const PostsAdmin = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     // Form State
     const [editingPost, setEditingPost] = useState(null);
     const [formData, setFormData] = useState({
@@ -21,22 +22,35 @@ const PostsAdmin = () => {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     const fileInputRef = useRef(null);
+    const editor = useRef(null);
+    const config = {
+        readonly: false,
+        placeholder: 'Write your excellent article excerpt or body here...',
+        height: 400,
+        enableDragAndDropFileToEditor: true,
+        askBeforePasteHTML: false,
+        askBeforePasteFromWord: false,
+        defaultActionOnPaste: 'insert_as_html',
+        uploader: {
+            insertImageAsBase64URI: true
+        }
+    };
 
     // Filter & Pagination State
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 100;
 
-    const filteredPosts = posts.filter(p => 
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const filteredPosts = posts.filter(p =>
+        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredPosts.length / itemsPerPage) || 1;
     const paginatedPosts = filteredPosts.slice(
-        (currentPage - 1) * itemsPerPage, 
+        (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
@@ -48,7 +62,7 @@ const PostsAdmin = () => {
     const fetchPosts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/posts/admin', {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/admin`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPosts(res.data);
@@ -98,7 +112,7 @@ const PostsAdmin = () => {
                 content: post.content,
                 status: post.status
             });
-            setImagePreview(post.image ? `http://localhost:5000${post.image}` : '');
+            setImagePreview(post.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}` : '');
             setImageFile(null);
         } else {
             setEditingPost(null);
@@ -119,37 +133,39 @@ const PostsAdmin = () => {
         e.preventDefault();
         setIsSubmitting(true);
         const token = localStorage.getItem('token');
-        
+
+        const finalContent = formData.content;
+
         // Since we have file uploads, we must use FormData
         const data = new FormData();
         data.append('title', formData.title);
         data.append('slug', formData.slug);
         data.append('category', formData.category);
-        data.append('content', formData.content);
+        data.append('content', finalContent);
         data.append('status', formData.status);
         if (imageFile) {
             data.append('image', imageFile);
         }
 
-        const config = { 
-            headers: { 
+        const axiosConfig = {
+            headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
-            } 
+            }
         };
 
         try {
             if (editingPost) {
-                await axios.put(`http://localhost:5000/api/posts/${editingPost.id}`, data, config);
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${editingPost.id}`, data, axiosConfig);
                 toast.success("Blog post updated successfully!");
             } else {
-                await axios.post('http://localhost:5000/api/posts', data, config);
+                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`, data, axiosConfig);
                 toast.success("New blog post published!");
             }
             closeModal();
             fetchPosts();
         } catch (error) {
-            toast.error(error.response?.data?.message || "Operation failed.");
+            toast.error(error.response?.data?.message || "Operation failed saving article.");
         } finally {
             setIsSubmitting(false);
         }
@@ -157,10 +173,10 @@ const PostsAdmin = () => {
 
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this blog post? This cannot be undone.")) return;
-        
+
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5000/api/posts/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success("Post deleted permanently");
@@ -181,7 +197,7 @@ const PostsAdmin = () => {
         data.append('status', newStatus);
 
         try {
-            await axios.put(`http://localhost:5000/api/posts/${post.id}`, data, {
+            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${post.id}`, data, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
             });
             toast.success(`Post marked as ${newStatus}`);
@@ -207,12 +223,12 @@ const PostsAdmin = () => {
                         <Plus size={18} /> Write New Post
                     </button>
                 </div>
-                
+
                 <div className="search-bar" style={{ maxWidth: '400px', marginTop: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', background: 'var(--bg-card)', padding: '10px 15px', borderRadius: '8px', border: '1px solid var(--card-border)' }}>
                     <Search size={18} className="text-secondary" style={{ marginRight: '10px' }} />
-                    <input 
-                        type="text" 
-                        placeholder="Search posts by title or category..." 
+                    <input
+                        type="text"
+                        placeholder="Search posts by title or category..."
                         value={searchTerm}
                         onChange={handleSearch}
                         style={{ border: 'none', background: 'transparent', outline: 'none', color: 'var(--text-primary)', width: '100%', fontFamily: 'inherit' }}
@@ -226,6 +242,7 @@ const PostsAdmin = () => {
                         <tr>
                             <th>Cover</th>
                             <th>Title & Category</th>
+                            <th className="text-center">Views</th>
                             <th>Status</th>
                             <th>Last Modified</th>
                             <th>Actions</th>
@@ -234,9 +251,9 @@ const PostsAdmin = () => {
                     <tbody>
                         {paginatedPosts.map(post => (
                             <tr key={post.id}>
-                                <td style={{width: '90px'}}>
+                                <td style={{ width: '90px' }}>
                                     {post.image ? (
-                                        <div className="post-thumbnail" style={{backgroundImage: `url(http://localhost:5000${post.image})`}}></div>
+                                        <div className="post-thumbnail" style={{ backgroundImage: `url(http://localhost:5000${post.image})` }}></div>
                                     ) : (
                                         <div className="post-thumbnail placeholder flex-center">
                                             <ImageIcon size={20} className="text-secondary" />
@@ -245,11 +262,17 @@ const PostsAdmin = () => {
                                 </td>
                                 <td>
                                     <div className="font-medium">{post.title}</div>
-                                    <div className="text-secondary" style={{fontSize: '0.8rem'}}>{post.category}</div>
+                                    <div className="text-secondary" style={{ fontSize: '0.8rem' }}>{post.category}</div>
+                                </td>
+                                <td className="text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                        {/* <TrendingUp size={14} className="text-accent" /> */}
+                                        <span className="font-medium text-primary">{post.views || 0}</span>
+                                    </div>
                                 </td>
                                 <td>
-                                    <button 
-                                        className={`status-badge ${post.status}`} 
+                                    <button
+                                        className={`status-badge ${post.status}`}
                                         onClick={() => toggleStatus(post)}
                                         title={post.status === 'published' ? 'Click to Unpublish' : 'Click to Publish'}
                                     >
@@ -274,7 +297,7 @@ const PostsAdmin = () => {
                         ))}
                         {paginatedPosts.length === 0 && (
                             <tr>
-                                <td colSpan="5" className="text-center py-4 text-secondary">
+                                <td colSpan="6" className="text-center py-4 text-secondary">
                                     {searchTerm ? 'No posts match your search.' : 'No blog posts found. Write your first article today!'}
                                 </td>
                             </tr>
@@ -285,8 +308,8 @@ const PostsAdmin = () => {
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
                     <div className="pagination" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', padding: '1.5rem', borderTop: '1px solid var(--card-border)' }}>
-                        <button 
-                            className="btn-pagination" 
+                        <button
+                            className="btn-pagination"
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(p => p - 1)}
                             style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === 1 ? 'transparent' : 'var(--accent-primary)', color: currentPage === 1 ? 'var(--text-secondary)' : '#fff', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === 1 ? 0.5 : 1 }}
@@ -294,8 +317,8 @@ const PostsAdmin = () => {
                             <ChevronLeft size={18} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} /> Prev
                         </button>
                         <span className="page-info font-medium" style={{ color: 'var(--text-primary)' }}>Page {currentPage} of {totalPages}</span>
-                        <button 
-                            className="btn-pagination" 
+                        <button
+                            className="btn-pagination"
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(p => p + 1)}
                             style={{ padding: '8px 16px', borderRadius: '6px', background: currentPage === totalPages ? 'transparent' : 'var(--accent-primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : '#fff', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', border: '1px solid var(--card-border)', opacity: currentPage === totalPages ? 0.5 : 1 }}
@@ -315,14 +338,14 @@ const PostsAdmin = () => {
                             <button className="icon-btn" onClick={closeModal}><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="admin-form">
-                            
-                            <div className="form-row" style={{display: 'flex', gap: '1.5rem'}}>
-                                <div className="form-group" style={{flex: 2}}>
+
+                            <div className="form-row" style={{ display: 'flex', gap: '1.5rem' }}>
+                                <div className="form-group" style={{ flex: 2 }}>
                                     <label>Article Title</label>
                                     <input type="text" name="title" value={formData.title} onChange={handleTitleChange} required placeholder="Top 10 Web Frameworks in 2026" />
                                 </div>
-                                
-                                <div className="form-group" style={{flex: 1}}>
+
+                                <div className="form-group" style={{ flex: 1 }}>
                                     <label>Category</label>
                                     <select name="category" value={formData.category} onChange={handleInputChange}>
                                         <option value="Technology">Technology</option>
@@ -335,12 +358,20 @@ const PostsAdmin = () => {
 
                             <div className="form-group">
                                 <label>URL Slug (auto-generated)</label>
-                                <input type="text" name="slug" value={formData.slug} onChange={handleInputChange} required style={{background: 'rgba(0,0,0,0.1)'}} />
+                                <input type="text" name="slug" value={formData.slug} onChange={handleInputChange} required style={{ background: 'rgba(0,0,0,0.1)' }} />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
                                 <label>Article Content (Excerpt or Full text)</label>
-                                <textarea name="content" value={formData.content} onChange={handleInputChange} rows="6" required placeholder="Write your excellent article excerpt or body here..."></textarea>
+                                <div style={{ color: '#000', backgroundColor: '#fff', borderRadius: '4px', overflow: 'hidden' }}>
+                                    <JoditEditor
+                                        ref={editor}
+                                        value={formData.content}
+                                        config={config}
+                                        tabIndex={1}
+                                        onChange={newContent => setFormData(prev => ({ ...prev, content: newContent }))}
+                                    />
+                                </div>
                             </div>
 
                             <div className="form-group">

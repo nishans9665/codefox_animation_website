@@ -7,13 +7,16 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 // Set up multer for image storage
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads/')),
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+const upload = multer({
+    storage,
+    limits: { fieldSize: 50 * 1024 * 1024 } // allow 50MB for large base64 HTML content
+});
 
 // Public: Get all published posts
 router.get('/', async (req, res) => {
@@ -46,7 +49,11 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
         );
         res.status(201).json({ message: 'Post created', id: result.insertId });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
+        console.error('SERVER_ERROR_POST:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: `Article with slug '${slug}' already exists. Please change the title.` });
+        }
+        res.status(500).json({ message: 'Server error saving article', error: error.message });
     }
 });
 
@@ -54,16 +61,16 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
 router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     const { title, slug, category, content, status } = req.body;
     const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
-    
+
     try {
         let query = 'UPDATE posts SET title=?, slug=?, category=?, content=?, status=?';
         let params = [title, slug, category, content, status];
-        
+
         if (imagePath) {
             query += ', image=?';
             params.push(imagePath);
         }
-        
+
         query += ' WHERE id=?';
         params.push(req.params.id);
 
@@ -84,9 +91,12 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// Public: Get single post by slug
+// Public: Get single post by slug and increment view count
 router.get('/article/:slug', async (req, res) => {
     try {
+        // Increment view count
+        await pool.query('UPDATE posts SET views = views + 1 WHERE slug = ? AND status = "published"', [req.params.slug]);
+
         const [posts] = await pool.query('SELECT * FROM posts WHERE slug = ? AND status = "published"', [req.params.slug]);
         if (posts.length === 0) return res.status(404).json({ message: 'Post not found' });
         res.json(posts[0]);

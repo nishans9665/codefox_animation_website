@@ -269,3 +269,11 @@ footer,
 .site-footer {
   background-color: transparent !important;
 }
+
+/* Jodit Editor Z-Index Fix for pasting dialogs and popups over Modals */
+.jodit-dialog__box,
+.jodit-popup,
+.jodit-ui-popup,
+.jodit-dialog {
+  z-index: 99999 !important;
+}
