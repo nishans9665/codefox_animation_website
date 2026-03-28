@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Plus, Edit2, Trash2, X, Loader, Globe, FileText, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import './PostsAdmin.css';
+import JoditEditor from 'jodit-react';
 
 const PostsAdmin = () => {
     const [posts, setPosts] = useState([]);
@@ -23,6 +24,19 @@ const PostsAdmin = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const fileInputRef = useRef(null);
+    const editor = useRef(null);
+    const config = {
+        readonly: false,
+        placeholder: 'Write your excellent article excerpt or body here...',
+        height: 400,
+        enableDragAndDropFileToEditor: true,
+        askBeforePasteHTML: false,
+        askBeforePasteFromWord: false,
+        defaultActionOnPaste: 'insert_as_html',
+        uploader: {
+            insertImageAsBase64URI: true
+        }
+    };
 
     // Filter & Pagination State
     const [searchTerm, setSearchTerm] = useState('');
@@ -338,9 +352,18 @@ const PostsAdmin = () => {
                                 <input type="text" name="slug" value={formData.slug} onChange={handleInputChange} required style={{background: 'rgba(0,0,0,0.1)'}} />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
                                 <label>Article Content (Excerpt or Full text)</label>
-                                <textarea name="content" value={formData.content} onChange={handleInputChange} rows="6" required placeholder="Write your excellent article excerpt or body here..."></textarea>
+                                <div style={{ color: '#000', backgroundColor: '#fff', borderRadius: '4px', overflow: 'hidden' }}>
+                                    <JoditEditor
+                                        ref={editor}
+                                        value={formData.content}
+                                        config={config}
+                                        tabIndex={1}
+                                        onBlur={newContent => setFormData(prev => ({ ...prev, content: newContent }))}
+                                        onChange={newContent => {}}
+                                    />
+                                </div>
                             </div>
 
                             <div className="form-group">

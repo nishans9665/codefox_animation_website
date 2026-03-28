@@ -89,7 +89,7 @@ const News = () => {
                                 </h3>
                                 {/* Safe substring for excerpt handling if content is extremely long */}
                                 <p className="news-excerpt">
-                                    {item.content ? item.content.substring(0, 110) + (item.content.length > 110 ? '...' : '') : 'No description provided.'}
+                                    {item.content ? item.content.replace(/<[^>]+>/g, '').substring(0, 110) + (item.content.replace(/<[^>]+>/g, '').length > 110 ? '...' : '') : 'No description provided.'}
                                 </p>
                                 <Link to={`/post/${item.slug}`} className="news-link">
                                     Read Article <ArrowRight size={16} />

@@ -61,8 +61,6 @@ const SinglePost = () => {
         ? (post.image.startsWith('http') ? post.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}`)
         : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
 
-    // Split text by newlines and create paragraphs cleanly.
-    const textParagraphs = post.content ? post.content.split('\n').filter(p => p.trim() !== '') : [];
 
     const toggleLike = () => {
         setLiked(!liked);
@@ -112,9 +110,7 @@ const SinglePost = () => {
                     </div>
 
                     <div className="post-content glass-panel">
-                        {textParagraphs.map((paragraph, idx) => (
-                            <p key={idx}>{paragraph}</p>
-                        ))}
+                        <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: post.content || '' }} />
 
                         <div className="post-actions">
                             <button className={`action-btn like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
