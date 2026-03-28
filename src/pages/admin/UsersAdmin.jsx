@@ -9,6 +9,10 @@ const UsersAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     
+    // Auth State
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const isAdmin = currentUser.role === 'Admin';
+    
     // Form State
     const [editingUser, setEditingUser] = useState(null);
     const [formData, setFormData] = useState({
@@ -113,9 +117,11 @@ const UsersAdmin = () => {
                     <h2>User Management</h2>
                     <p>Manage administrator and editor accounts</p>
                 </div>
-                <button className="btn btn-primary flex-center gap-2" onClick={() => openModal()}>
-                    <Plus size={18} /> Add New User
-                </button>
+                {isAdmin && (
+                    <button className="btn btn-primary flex-center gap-2" onClick={() => openModal()}>
+                        <Plus size={18} /> Add New User
+                    </button>
+                )}
             </div>
 
             <div className="glass-panel table-container">
@@ -126,7 +132,7 @@ const UsersAdmin = () => {
                             <th>Email Address</th>
                             <th>Role</th>
                             <th>Date Added</th>
-                            <th>Actions</th>
+                            {isAdmin && <th>Actions</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -143,16 +149,18 @@ const UsersAdmin = () => {
                                 <td className="text-secondary">
                                     {new Date(user.created_at).toLocaleDateString()}
                                 </td>
-                                <td>
-                                    <div className="action-buttons">
-                                        <button className="icon-btn edit-btn" onClick={() => openModal(user)} title="Edit User">
-                                            <Edit2 size={18} />
-                                        </button>
-                                        <button className="icon-btn delete-btn" onClick={() => handleDelete(user.id)} title="Delete User">
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
-                                </td>
+                                {isAdmin && (
+                                    <td>
+                                        <div className="action-buttons">
+                                            <button className="icon-btn edit-btn" onClick={() => openModal(user)} title="Edit User">
+                                                <Edit2 size={18} />
+                                            </button>
+                                            <button className="icon-btn delete-btn" onClick={() => handleDelete(user.id)} title="Delete User">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                         {users.length === 0 && (
