@@ -64,10 +64,11 @@ const Footer = () => {
                     <div className="footer-col">
                         <h3 className="footer-title">Our Services</h3>
                         <ul className="footer-links">
-                            <li><a href="#">Web Development</a></li>
+                            <li><Link to="/services/custom-web-development">Web Development</Link></li>
+                            <li><Link to="/services/wordpress-development">WordPress Development</Link></li>
+                            <li><Link to="/services/ecommerce-development">E-commerce Development</Link></li>
                             <li><a href="#">Software Development</a></li>
                             <li><a href="#">UI/UX Design</a></li>
-                            <li><a href="#">Mobile App Dev</a></li>
                             <li><a href="#">IT Consulting</a></li>
                         </ul>
                     </div>
@@ -82,7 +83,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Phone size={20} className="contact-icon" />
-                                <span>+94 772435591</span>
+                                <span>+1 (514) 895-3631</span>
                             </li>
                             <li>
                                 <Mail size={20} className="contact-icon" />

@@ -58,7 +58,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h4>Phone</h4>
-                                    <p>+94 772435591</p>
+                                    <p>+1 (514) 895-3631</p>
                                 </div>
                             </li>
 
@@ -102,7 +102,7 @@ const Contact = () => {
 
                             <div className="form-group">
                                 <label htmlFor="phone">Phone Number</label>
-                                <input type="tel" id="phone" placeholder="+94 772435591" value={formData.phone} onChange={handleChange} />
+                                <input type="tel" id="phone" placeholder="+1 (514) 895-3631" value={formData.phone} onChange={handleChange} />
                             </div>
 
                             <div className="form-group">

@@ -1,0 +1,184 @@
+.ecommerce-page {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Page Header / Hero */
+.ecommerce-page .page-header {
+    padding: 160px 0 100px;
+    background: radial-gradient(circle at top right, rgba(255, 123, 0, 0.1), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(255, 123, 0, 0.05), transparent 40%);
+    text-align: center;
+    position: relative;
+}
+
+.ecommerce-page .page-header .subtitle {
+    display: block;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.ecommerce-page .page-header .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.ecommerce-page .page-header .page-desc {
+    font-size: 1.25rem;
+    max-width: 850px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-secondary);
+}
+
+/* Services Grid */
+.ecommerce-page .services-section {
+    padding: 100px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.ecommerce-page .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.ecommerce-page .service-box {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.ecommerce-page .service-box:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ecommerce-page .service-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(234, 88, 12, 0.1);
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.ecommerce-page .service-box h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.ecommerce-page .service-box p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Ecommerce Workflow / Features describing functions */
+.ecommerce-page .workflow-section {
+    padding: 100px 0;
+}
+
+.ecommerce-page .workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.ecommerce-page .workflow-item {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.ecommerce-page .step-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(234, 88, 12, 0.2);
+    line-height: 1;
+}
+
+.ecommerce-page .step-content h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+}
+
+.ecommerce-page .step-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Industries Section */
+.ecommerce-page .industries-section {
+    padding: 100px 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.ecommerce-page .industry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.ecommerce-page .industry-tag {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.ecommerce-page .industry-tag:hover {
+    background: rgba(234, 88, 12, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* CTA */
+.ecommerce-page .page-cta {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.ecommerce-page .cta-box {
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.15), rgba(0,0,0,0.5));
+    padding: 5rem 2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
+.ecommerce-page .cta-box h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.ecommerce-page .cta-box p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .ecommerce-page .cta-box h2 {
+        font-size: 2rem;
+    }
+}

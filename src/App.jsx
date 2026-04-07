@@ -9,6 +9,9 @@ import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import SinglePost from './pages/SinglePost';
 import PortfolioPage from './pages/PortfolioPage';
+import CustomWebDevelopment from './pages/CustomWebDevelopment';
+import WordPressDevelopment from './pages/WordPressDevelopment';
+import EcommerceDevelopment from './pages/EcommerceDevelopment';
 import { Toaster } from 'react-hot-toast';
 
 // Admin Pages
@@ -70,6 +73,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/services/custom-web-development" element={<CustomWebDevelopment />} />
+          <Route path="/services/wordpress-development" element={<WordPressDevelopment />} />
+          <Route path="/services/ecommerce-development" element={<EcommerceDevelopment />} />
           <Route path="/post/:slug" element={<SinglePost />} />
         </Route>
 
