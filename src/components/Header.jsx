@@ -51,7 +51,8 @@ const Header = () => {
             dropdown: [
                 { name: 'Custom Web Development', path: '/services/custom-web-development' },
                 { name: 'WordPress Web Development', path: '/services/wordpress-development' },
-                { name: 'E-commerce Web Development', path: '/services/ecommerce-development' },
+                { name: 'Ecommerce Web Development', path: '/services/ecommerce-development' },
+                { name: 'Web Optimization', path: '/services/web-optimization' },
                 { name: 'Custom Software Development', path: '/#services' },
             ]
         },

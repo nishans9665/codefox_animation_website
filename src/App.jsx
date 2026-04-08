@@ -12,6 +12,7 @@ import PortfolioPage from './pages/PortfolioPage';
 import CustomWebDevelopment from './pages/CustomWebDevelopment';
 import WordPressDevelopment from './pages/WordPressDevelopment';
 import EcommerceDevelopment from './pages/EcommerceDevelopment';
+import WebOptimization from './pages/WebOptimization';
 import { Toaster } from 'react-hot-toast';
 
 // Admin Pages
@@ -76,6 +77,7 @@ function App() {
           <Route path="/services/custom-web-development" element={<CustomWebDevelopment />} />
           <Route path="/services/wordpress-development" element={<WordPressDevelopment />} />
           <Route path="/services/ecommerce-development" element={<EcommerceDevelopment />} />
+          <Route path="/services/web-optimization" element={<WebOptimization />} />
           <Route path="/post/:slug" element={<SinglePost />} />
         </Route>
 

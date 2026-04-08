@@ -1,20 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import webimage from '../assets/web-image1.avif';
 import {
-    Layout,
-    Smartphone,
+    Zap,
     Search,
+    Bug,
+    ShieldCheck,
+    BarChart,
     Code2,
     CheckCircle2,
     Settings,
-    ShieldCheck,
     Cpu,
-    Globe,
-    ExternalLink
+    Smartphone
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
-import './WordPressDevelopment.css';
+import './WebOptimization.css';
 
 const GlobalStarfield = () => {
     const canvasRef = useRef(null);
@@ -82,7 +82,7 @@ const GlobalStarfield = () => {
     );
 };
 
-const WordPressDevelopment = () => {
+const WebOptimization = () => {
     useScrollReveal();
 
     useEffect(() => {
@@ -91,56 +91,52 @@ const WordPressDevelopment = () => {
 
     const features = [
         {
-            icon: <Settings size={30} />,
-            title: 'Custom Theme Development',
-            desc: 'We build unique, lightweight WordPress themes from scratch that reflect your brand identity and performance needs.'
-        },
-        {
-            icon: <Cpu size={30} />,
-            title: 'Advanced Features Integration',
-            desc: 'Seamlessly integrating custom plugins and advanced features to enhance functionality for your specific business goals.'
+            icon: <Zap size={30} />,
+            title: 'Speed Optimization',
+            desc: 'Ultra-fast loading times through advanced caching, image optimization, and code minification strategies.'
         },
         {
             icon: <Search size={30} />,
-            title: 'SEO Optimization',
-            desc: 'Implementing best practices to boost your search engine rankings, driving organic traffic and online visibility.'
+            title: 'SEO Friendly Audit',
+            desc: 'Comprehensive technical SEO optimization to ensure search engines can index and rank your site effectively.'
         },
         {
-            icon: <Smartphone size={30} />,
-            title: 'Mobile Responsiveness',
-            desc: 'Ensuring your WordPress site delivers a flawless experience across all devices, from desktops to smartphones.'
+            icon: <Bug size={30} />,
+            title: 'Expert Bug Fixing',
+            desc: 'Identifying and resolving critical errors, layout breaks, and functional issues across all browsers.'
+        },
+        {
+            icon: <ShieldCheck size={30} />,
+            title: 'Security Hardening',
+            desc: 'Protecting your web applications with modern security protocols and vulnerability patching.'
         }
     ];
 
     const benefits = [
-        "Scalable Architecture",
-        "User-Friendly CMS",
-        "Fast Performance",
-        "Enhanced Security",
-        "Custom Plugin Development",
-        "Ongoing Support"
-    ];
-
-    const industries = [
-        "Travel & Tourism", "Hospitality", "Education", "Account & Finance", "Construction", "Transportation & Logistics", "Corporate", "SME Brands"
+        "Core Web Vitals Scoring",
+        "Mobile-First Optimization",
+        "Conversion Rate Uplift",
+        "Cross-Browser Stability",
+        "Technical Debt Reduction",
+        "Real-time Performance Monitoring"
     ];
 
     return (
-        <main className="wordpress-page">
+        <main className="web-optimization-page">
             <GlobalStarfield />
 
             {/* Hero Section */}
             <section className="page-header">
                 <div className="container">
-                    <span className="subtitle animate-fade-in">WordPress CMS Experts</span>
+                    <span className="subtitle animate-fade-in">Performance & Growth</span>
                     <h1 className="page-title animate-fade-in-up">
-                        WordPress <span className="text-gradient">Web Development</span> Services
+                        Web & System <span className="text-gradient">Optimization</span>
                     </h1>
                     <p className="page-desc animate-fade-in-up delay-1">
-                        Empowering your business with custom themes, advanced technical SEO,
-                        and high-performance WordPress solutions that grow with you.
+                        Maximize your digital potential with high-performance speed optimization, 
+                        technical SEO, and bulletproof system reliability.
                     </p>
-                    <Link to="/contact" className="btn btn-primary animate-fade-in-up delay-2">Start Your Project</Link>
+                    <Link to="/contact" className="btn btn-primary animate-fade-in-up delay-2">Optimize My Site</Link>
                 </div>
             </section>
 
@@ -151,21 +147,21 @@ const WordPressDevelopment = () => {
                         <div className="intro-image reveal">
                             <img
                                 src={webimage}
-                                alt="WordPress Dashboard"
+                                alt="Web Performance Dashboard"
                             />
                         </div>
                         <div className="intro-text reveal delay-2">
-                            <span className="subtitle">Empowering with WordPress</span>
-                            <h2>Websites That Build <span className="text-gradient">Measurable Growth</span></h2>
+                            <span className="subtitle">Why Optimization Matters</span>
+                            <h2>Speed That <span className="text-gradient">Converts & Ranks</span></h2>
                             <p>
-                                We build WordPress websites that enhance your online presence with stunning designs,
-                                responsive layouts, and intuitive navigation. Our solutions are feature-rich and scalable,
-                                ensuring your site grows alongside your business.
+                                In today's digital landscape, every millisecond counts. A slow website doesn't just frustrate users; 
+                                it directly impacts your Google ranking and conversion rates. Our optimization services 
+                                transform sluggish sites into high-velocity business assets.
                             </p>
                             <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-                                From custom themes to powerful plugins, our WordPress development services offer
-                                everything you need to create a website that stands out and performs. We combine
-                                captivating aesthetics with seamless technical implementation.
+                                We go beyond simple caching. Our team performs deep architectural audits to eliminate 
+                                render-blocking issues, optimize server response times, and implement cutting-edge 
+                                technical SEO to ensure your visibility is maximized.
                             </p>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                 {benefits.map((benefit, i) => (
@@ -184,10 +180,11 @@ const WordPressDevelopment = () => {
             <section className="section features-section">
                 <div className="container">
                     <div className="section-header text-center reveal">
-                        <span className="subtitle">Core Services</span>
-                        <h2 className="section-title">WordPress <span className="text-gradient">Capabilities</span></h2>
+                        <span className="subtitle">Comprehensive Solutions</span>
+                        <h2 className="section-title">Optimization <span className="text-gradient">Framework</span></h2>
                         <p className="section-desc mx-auto" style={{ maxWidth: '700px' }}>
-                            We don't just use templates; we create sustainable WordPress ecosystems that solve complex business problems.
+                            We provide a full-spectrum approach to system health, ensuring your application is 
+                            fast, visible, and error-free.
                         </p>
                     </div>
 
@@ -205,32 +202,16 @@ const WordPressDevelopment = () => {
                 </div>
             </section>
 
-            {/* Industries */}
-            <section className="section industries-section">
-                <div className="container">
-                    <div className="section-header text-center reveal">
-                        <span className="subtitle">Our Expertise</span>
-                        <h2 className="section-title">Industries <span className="text-gradient">We Serve</span></h2>
-                    </div>
-
-                    <div className="industry-tags reveal">
-                        {industries.map((tag, i) => (
-                            <span className="industry-tag" key={i}>{tag}</span>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* CTA */}
             <section className="page-cta section">
                 <div className="container">
                     <div className="cta-box reveal">
-                        <h2>Your Digital Success <span className="text-gradient">Starts Here</span></h2>
+                        <h2>Ready to <span className="text-gradient">Boost Performance?</span></h2>
                         <p>
-                            From custom themes to powerful plugins, our WordPress development services offer
-                            everything you need to create a website that stands out and performs.
+                            Don't let slow load times or technical bugs hold your business back. 
+                            Let our experts audit your system and implement a tailor-made optimization strategy.
                         </p>
-                        <Link to="/contact" className="btn btn-primary btn-lg">Discuss a Project</Link>
+                        <Link to="/contact" className="btn btn-primary btn-lg">Free Performance Audit</Link>
                     </div>
                 </div>
             </section>
@@ -239,4 +220,4 @@ const WordPressDevelopment = () => {
     );
 };
 
-export default WordPressDevelopment;
+export default WebOptimization;
