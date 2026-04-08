@@ -67,9 +67,9 @@ const Footer = () => {
                             <li><Link to="/services/custom-web-development">Web Development</Link></li>
                             <li><Link to="/services/wordpress-development">WordPress Development</Link></li>
                             <li><Link to="/services/ecommerce-development">E-commerce Development</Link></li>
-                            <li><a href="#">Software Development</a></li>
-                            <li><a href="#">UI/UX Design</a></li>
-                            <li><a href="#">IT Consulting</a></li>
+                            <li><Link to="/software-solutions">Software Development</Link></li>
+                            <li><Link to="/ui-ux-design">UI/UX Design</Link></li>
+                            <li><Link to="/software-solutions">IT Consulting</Link></li>
                         </ul>
                     </div>
 

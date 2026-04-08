@@ -1,0 +1,172 @@
+.software-solutions-page {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Page Header / Hero */
+.software-solutions-page .page-header {
+    padding: 160px 0 100px;
+    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.05), transparent 40%);
+    text-align: center;
+    position: relative;
+}
+
+.software-solutions-page .page-header .subtitle {
+    display: block;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.software-solutions-page .page-header .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.software-solutions-page .page-header .page-desc {
+    font-size: 1.25rem;
+    max-width: 850px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-secondary);
+}
+
+/* Solution Blocks */
+.software-solutions-page .solution-block {
+    padding: 100px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.software-solutions-page .solution-block:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.software-solutions-page .solution-block:last-of-type {
+    border-bottom: none;
+}
+
+.software-solutions-page .solution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.software-solutions-page .solution-grid.reverse {
+    grid-template-columns: 1.2fr 1fr;
+}
+
+.software-solutions-page .solution-grid.reverse .solution-text {
+    order: -1;
+}
+
+.software-solutions-page .solution-visual {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.05);
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Abstract visual representation instead of pure images */
+.software-solutions-page .abstract-visual {
+    width: 60%;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-primary);
+    opacity: 0.8;
+}
+
+.software-solutions-page .solution-text h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.software-solutions-page .solution-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.software-solutions-page .feature-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.software-solutions-page .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.software-solutions-page .feature-item span {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+/* CTA */
+.software-solutions-page .page-cta {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.software-solutions-page .cta-box {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(0,0,0,0.6));
+    padding: 5rem 2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.software-solutions-page .cta-box h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.software-solutions-page .cta-box p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 992px) {
+    .software-solutions-page .solution-grid,
+    .software-solutions-page .solution-grid.reverse {
+        grid-template-columns: 1fr;
+    }
+    
+    .software-solutions-page .solution-grid.reverse .solution-text {
+        order: 1; /* Reset order on mobile so visual is on top */
+    }
+    
+    .software-solutions-page .solution-visual {
+        order: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .software-solutions-page .cta-box h2,
+    .software-solutions-page .page-header .page-title {
+        font-size: 2rem;
+    }
+    .software-solutions-page .feature-list {
+        grid-template-columns: 1fr;
+    }
+}

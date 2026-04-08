@@ -1,0 +1,151 @@
+.uiux-design-page {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Page Header / Hero */
+.uiux-design-page .page-header {
+    padding: 160px 0 100px;
+    background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.15), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.05), transparent 40%);
+    text-align: center;
+    position: relative;
+}
+
+.uiux-design-page .page-header .subtitle {
+    display: block;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.uiux-design-page .page-header .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.uiux-design-page .page-header .page-desc {
+    font-size: 1.25rem;
+    max-width: 850px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-secondary);
+}
+
+/* Process section (specific to UI/UX) */
+.uiux-design-page .process-section {
+    padding: 100px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.uiux-design-page .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.uiux-design-page .process-card {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.uiux-design-page .process-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.uiux-design-page .step-number {
+    position: absolute;
+    top: -20px;
+    right: 30px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.05);
+    line-height: 1;
+}
+
+.uiux-design-page .process-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(236, 72, 153, 0.1); /* Pink-ish tint for UI/UX vibe */
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.uiux-design-page .process-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.uiux-design-page .process-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.uiux-design-page .deliverables-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.uiux-design-page .deliverables-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+/* CTA */
+.uiux-design-page .page-cta {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.uiux-design-page .cta-box {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(0,0,0,0.6));
+    padding: 5rem 2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.uiux-design-page .cta-box h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.uiux-design-page .cta-box p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .uiux-design-page .cta-box h2,
+    .uiux-design-page .page-header .page-title {
+        font-size: 2rem;
+    }
+}
