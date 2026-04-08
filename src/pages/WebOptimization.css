@@ -1,0 +1,191 @@
+.web-optimization-page {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Page Header / Hero */
+.web-optimization-page .page-header {
+    padding: 160px 0 100px;
+    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.05), transparent 40%);
+    text-align: center;
+    position: relative;
+}
+
+.web-optimization-page .page-header .subtitle {
+    display: block;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.web-optimization-page .page-header .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.web-optimization-page .page-header .page-desc {
+    font-size: 1.25rem;
+    max-width: 850px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-secondary);
+}
+
+/* Features Grid */
+.web-optimization-page .features-section {
+    padding: 100px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.web-optimization-page .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.web-optimization-page .feature-box {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.web-optimization-page .feature-box:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.web-optimization-page .feature-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.web-optimization-page .feature-box h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.web-optimization-page .feature-box p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Intro Section */
+.web-optimization-page .intro-section {
+    padding: 100px 0;
+}
+
+.web-optimization-page .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.web-optimization-page .intro-image {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.web-optimization-page .intro-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.web-optimization-page .intro-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.web-optimization-page .intro-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Industries Section */
+.web-optimization-page .industries-section {
+    padding: 100px 0;
+}
+
+.web-optimization-page .industry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.web-optimization-page .industry-tag {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.web-optimization-page .industry-tag:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* CTA */
+.web-optimization-page .page-cta {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.web-optimization-page .cta-box {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(0,0,0,0.6));
+    padding: 5rem 2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.web-optimization-page .cta-box h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.web-optimization-page .cta-box p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 992px) {
+    .web-optimization-page .intro-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .web-optimization-page .cta-box h2 {
+        font-size: 2rem;
+    }
+}

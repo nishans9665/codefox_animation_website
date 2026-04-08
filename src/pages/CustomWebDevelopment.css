@@ -1,0 +1,263 @@
+.custom-web-page {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Page Header / Hero */
+.custom-page-header {
+    padding: 160px 0 100px;
+    background: radial-gradient(circle at top right, rgba(234, 88, 12, 0.1), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(234, 88, 12, 0.05), transparent 40%);
+    text-align: center;
+    position: relative;
+}
+
+.custom-page-header .subtitle {
+    display: block;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.custom-page-header .page-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.custom-page-header .page-desc {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto 2.5rem;
+    color: var(--text-secondary);
+}
+
+.custom-web-page .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+.custom-web-page .stat-item {
+    text-align: center;
+}
+
+.custom-web-page .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.custom-web-page .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Content Sections */
+.custom-web-page .intro-section {
+    padding: 100px 0;
+}
+
+.custom-web-page .intro-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.custom-web-page .intro-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.custom-web-page .intro-text .lead-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.custom-web-page .visual-element {
+    position: relative;
+}
+
+.custom-web-page .floating-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.custom-web-page .visual-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: var(--accent-primary);
+    filter: blur(100px);
+    opacity: 0.2;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Features Grid */
+.custom-web-page .features-section {
+    padding: 100px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.custom-web-page .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.custom-web-page .feature-box {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.custom-web-page .feature-box:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-web-page .feature-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(234, 88, 12, 0.1);
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.custom-web-page .feature-box h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.custom-web-page .feature-box p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Industries Section */
+.custom-web-page .industries-section {
+    padding: 100px 0;
+}
+
+.custom-web-page .industry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.custom-web-page .industry-tag {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.custom-web-page .industry-tag:hover {
+    background: rgba(234, 88, 12, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* FAQ Section */
+.custom-web-page .faq-section {
+    padding: 100px 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.custom-web-page .faq-grid {
+    max-width: 900px;
+    margin: 4rem auto 0;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.custom-web-page .faq-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+}
+
+.custom-web-page .faq-item h4 {
+    color: var(--accent-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+.custom-web-page .faq-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* CTA */
+.custom-web-page .page-cta {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.custom-web-page .cta-box {
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.2), rgba(0,0,0,0.4));
+    padding: 5rem 2rem;
+    border-radius: 40px;
+    border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
+.custom-web-page .cta-box h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.custom-web-page .cta-box p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 992px) {
+    .intro-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-stats {
+        gap: 1.5rem;
+    }
+    .cta-box h2 {
+        font-size: 2rem;
+    }
+}

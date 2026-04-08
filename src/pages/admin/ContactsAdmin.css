@@ -45,6 +45,14 @@
   font-size: 0.75rem;
   font-weight: 700;
   border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
 }
 
 .badge-warning {
