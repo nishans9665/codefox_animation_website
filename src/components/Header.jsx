@@ -53,7 +53,7 @@ const Header = () => {
                 { name: 'WordPress Web Development', path: '/services/wordpress-development' },
                 { name: 'Ecommerce Web Development', path: '/services/ecommerce-development' },
                 { name: 'Web Optimization', path: '/services/web-optimization' },
-                { name: 'Custom Software Development', path: '/#services' },
+                { name: 'Custom Software Development', path: '/software-solutions' },
             ]
         },
         { name: 'Services', path: '/#services' },

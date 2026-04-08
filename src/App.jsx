@@ -13,6 +13,8 @@ import CustomWebDevelopment from './pages/CustomWebDevelopment';
 import WordPressDevelopment from './pages/WordPressDevelopment';
 import EcommerceDevelopment from './pages/EcommerceDevelopment';
 import WebOptimization from './pages/WebOptimization';
+import SoftwareSolutions from './pages/SoftwareSolutions';
+import UiUxDesign from './pages/UiUxDesign';
 import { Toaster } from 'react-hot-toast';
 
 // Admin Pages
@@ -25,13 +27,13 @@ import ProjectsAdmin from './pages/admin/ProjectsAdmin';
 import ContactsAdmin from './pages/admin/ContactsAdmin';
 
 // Dummy components to avoid breaking imports for CRM features yet to be fully coded on frontend
-const DummyAdminPage = ({title}) => (
-    <div className="admin-page">
-        <div className="admin-header"><h2>{title}</h2><p>CRM Feature Coming Soon</p></div>
-        <div className="glass-panel" style={{padding: '3rem', textAlign: 'center'}}>
-            <p className="text-secondary">UI interface for this module is currently matching up with the backend API.</p>
-        </div>
+const DummyAdminPage = ({ title }) => (
+  <div className="admin-page">
+    <div className="admin-header"><h2>{title}</h2><p>CRM Feature Coming Soon</p></div>
+    <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center' }}>
+      <p className="text-secondary">UI interface for this module is currently matching up with the backend API.</p>
     </div>
+  </div>
 );
 
 const MainSiteLayout = () => (
@@ -64,8 +66,8 @@ function App() {
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
-      <Toaster position="top-right" toastOptions={{ 
-          style: { background: '#2d3748', color: '#fff', borderRadius: '10px' } 
+      <Toaster position="top-right" toastOptions={{
+        style: { background: '#2d3748', color: '#fff', borderRadius: '10px' }
       }} />
       <Routes>
         {/* Main Website Client Routes */}
@@ -78,6 +80,8 @@ function App() {
           <Route path="/services/wordpress-development" element={<WordPressDevelopment />} />
           <Route path="/services/ecommerce-development" element={<EcommerceDevelopment />} />
           <Route path="/services/web-optimization" element={<WebOptimization />} />
+          <Route path="/software-solutions" element={<SoftwareSolutions />} />
+          <Route path="/ui-ux-design" element={<UiUxDesign />} />
           <Route path="/post/:slug" element={<SinglePost />} />
         </Route>
 
