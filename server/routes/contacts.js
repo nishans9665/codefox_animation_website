@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db');
+const supabase = require('../supabase');
 const authMiddleware = require('../middleware/authMiddleware');
 const nodemailer = require('nodemailer');
 const { body, validationResult } = require('express-validator');
@@ -49,10 +49,13 @@ router.post('/',
         const cleanMessage = xss.inHTMLData(message);
 
         try {
-            await pool.query(
-                'INSERT INTO contacts (full_name, email, phone, subject, message, is_read) VALUES (?, ?, ?, ?, ?, ?)',
-                [cleanName, cleanEmail, cleanPhone || null, cleanSubject, cleanMessage, false]
-            );
+            const { error } = await supabase
+                .from('contacts')
+                .insert([
+                    { full_name: cleanName, email: cleanEmail, phone: cleanPhone || null, subject: cleanSubject, message: cleanMessage, is_read: false }
+                ]);
+
+            if (error) throw error;
 
             // Send Email to Admin
             const adminMailOptions = {
@@ -89,13 +92,11 @@ router.post('/',
                 `
             };
 
-            // Attempt to send emails (catch errors quietly so form submission still succeeds for user)
+            // Attempt to send emails
             try {
                 if (process.env.SMTP_HOST) {
                     await transporter.sendMail(adminMailOptions);
                     await transporter.sendMail(userMailOptions);
-                } else {
-                    console.log('Skipping email delivery. Please configure SMTP settings in .env');
                 }
             } catch (err) {
                 console.error('Email sending failed:', err);
@@ -115,17 +116,21 @@ router.get('/', authMiddleware, async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const offset = (page - 1) * limit;
-        const search = req.query.search ? `%${req.query.search}%` : '%';
+        const search = req.query.search || '';
 
-        const [contacts] = await pool.query(
-            'SELECT * FROM contacts WHERE full_name LIKE ? OR email LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
-            [search, search, limit, offset]
-        );
+        let query = supabase
+            .from('contacts')
+            .select('*', { count: 'exact' });
 
-        const [[{ total }]] = await pool.query(
-            'SELECT COUNT(*) as total FROM contacts WHERE full_name LIKE ? OR email LIKE ?',
-            [search, search]
-        );
+        if (search) {
+            query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
+        }
+
+        const { data: contacts, count: total, error } = await query
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+        if (error) throw error;
 
         res.json({
             data: contacts,
@@ -138,16 +143,21 @@ router.get('/', authMiddleware, async (req, res) => {
         });
     } catch (error) {
         console.error('Fetch error:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 // Admin ONLY: View single contact
 router.get('/:id', authMiddleware, async (req, res) => {
     try {
-        const [contacts] = await pool.query('SELECT * FROM contacts WHERE id = ?', [req.params.id]);
-        if (contacts.length === 0) return res.status(404).json({ message: 'Not found' });
-        res.json(contacts[0]);
+        const { data: contact, error } = await supabase
+            .from('contacts')
+            .select('*')
+            .eq('id', req.params.id)
+            .single();
+
+        if (error || !contact) return res.status(404).json({ message: 'Not found' });
+        res.json(contact);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -157,7 +167,12 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.put('/:id/read', authMiddleware, async (req, res) => {
     try {
         const { is_read } = req.body;
-        await pool.query('UPDATE contacts SET is_read = ? WHERE id = ?', [is_read, req.params.id]);
+        const { error } = await supabase
+            .from('contacts')
+            .update({ is_read })
+            .eq('id', req.params.id);
+
+        if (error) throw error;
         res.json({ message: 'Status updated successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -167,7 +182,12 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 // Admin ONLY: Delete contact
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        await pool.query('DELETE FROM contacts WHERE id = ?', [req.params.id]);
+        const { error } = await supabase
+            .from('contacts')
+            .delete()
+            .eq('id', req.params.id);
+
+        if (error) throw error;
         res.json({ message: 'Deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -175,3 +195,4 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+

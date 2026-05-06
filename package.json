@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.105.3",
     "axios": "^1.13.6",
     "jodit-react": "^5.3.21",
     "jspdf": "^4.2.1",

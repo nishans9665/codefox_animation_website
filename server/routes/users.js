@@ -1,16 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const pool = require('../db');
+const supabase = require('../supabase');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Get all users
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const [users] = await pool.query('SELECT id, name, email, role, created_at FROM users');
+        const { data: users, error } = await supabase
+            .from('users')
+            .select('id, name, email, role, created_at');
+
+        if (error) throw error;
         res.json(users);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -22,10 +26,13 @@ router.post('/', authMiddleware, async (req, res) => {
     const { name, email, password, role } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await pool.query(
-            'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
-            [name, email, hashedPassword, role || 'Editor']
-        );
+        const { error } = await supabase
+            .from('users')
+            .insert([
+                { name, email, password: hashedPassword, role: role || 'Editor' }
+            ]);
+
+        if (error) throw error;
         res.status(201).json({ message: 'User created' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -41,19 +48,19 @@ router.put('/:id', authMiddleware, async (req, res) => {
             return res.status(403).json({ message: 'Forbidden' });
         }
 
-        let query = 'UPDATE users SET name=?, email=?, role=?';
-        let params = [name, email, role];
+        const updateData = { name, email, role };
 
         if (password && password.trim() !== '') {
             const hashedPassword = await bcrypt.hash(password, 10);
-            query += ', password=?';
-            params.push(hashedPassword);
+            updateData.password = hashedPassword;
         }
 
-        query += ' WHERE id=?';
-        params.push(req.params.id);
+        const { error } = await supabase
+            .from('users')
+            .update(updateData)
+            .eq('id', req.params.id);
 
-        await pool.query(query, params);
+        if (error) throw error;
         res.json({ message: 'User updated' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -69,11 +76,17 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 
     try {
-        await pool.query('DELETE FROM users WHERE id = ?', [req.params.id]);
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', req.params.id);
+
+        if (error) throw error;
         res.json({ message: 'User deleted' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 module.exports = router;
+
