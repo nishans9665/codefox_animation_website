@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const pool = require('../db');
+const supabase = require('../supabase');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Set up multer for image storage
@@ -21,20 +21,31 @@ const upload = multer({
 // Public: Get all published posts
 router.get('/', async (req, res) => {
     try {
-        const [posts] = await pool.query('SELECT * FROM posts WHERE status = "published" ORDER BY created_at DESC');
+        const { data: posts, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('status', 'published')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
         res.json(posts);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 // Admin ONLY: Get all posts (including drafts)
 router.get('/admin', authMiddleware, async (req, res) => {
     try {
-        const [posts] = await pool.query('SELECT * FROM posts ORDER BY created_at DESC');
+        const { data: posts, error } = await supabase
+            .from('posts')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
         res.json(posts);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
@@ -43,16 +54,22 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
     const { title, slug, category, content, status } = req.body;
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
     try {
-        const [result] = await pool.query(
-            'INSERT INTO posts (title, slug, category, image, content, status) VALUES (?, ?, ?, ?, ?, ?)',
-            [title, slug, category, imagePath, content, status || 'draft']
-        );
-        res.status(201).json({ message: 'Post created', id: result.insertId });
+        const { data, error } = await supabase
+            .from('posts')
+            .insert([
+                { title, slug, category, image: imagePath, content, status: status || 'draft' }
+            ])
+            .select();
+
+        if (error) {
+            if (error.code === '23505') { // Postgres unique violation code
+                return res.status(400).json({ message: `Article with slug '${slug}' already exists. Please change the title.` });
+            }
+            throw error;
+        }
+        res.status(201).json({ message: 'Post created', id: data[0].id });
     } catch (error) {
         console.error('SERVER_ERROR_POST:', error);
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({ message: `Article with slug '${slug}' already exists. Please change the title.` });
-        }
         res.status(500).json({ message: 'Server error saving article', error: error.message });
     }
 });
@@ -63,18 +80,15 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     const imagePath = req.file ? `/uploads/${req.file.filename}` : undefined;
 
     try {
-        let query = 'UPDATE posts SET title=?, slug=?, category=?, content=?, status=?';
-        let params = [title, slug, category, content, status];
+        const updateData = { title, slug, category, content, status };
+        if (imagePath) updateData.image = imagePath;
 
-        if (imagePath) {
-            query += ', image=?';
-            params.push(imagePath);
-        }
+        const { error } = await supabase
+            .from('posts')
+            .update(updateData)
+            .eq('id', req.params.id);
 
-        query += ' WHERE id=?';
-        params.push(req.params.id);
-
-        await pool.query(query, params);
+        if (error) throw error;
         res.json({ message: 'Post updated' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -84,25 +98,42 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
 // Admin ONLY: Delete post
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        await pool.query('DELETE FROM posts WHERE id = ?', [req.params.id]);
+        const { error } = await supabase
+            .from('posts')
+            .delete()
+            .eq('id', req.params.id);
+
+        if (error) throw error;
         res.json({ message: 'Post deleted' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 // Public: Get single post by slug and increment view count
 router.get('/article/:slug', async (req, res) => {
     try {
-        // Increment view count
-        await pool.query('UPDATE posts SET views = views + 1 WHERE slug = ? AND status = "published"', [req.params.slug]);
+        // Increment view count using rpc or manual update
+        // Manual update for simplicity now (Note: not atomic like views = views + 1)
+        const { data: post, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('slug', req.params.slug)
+            .eq('status', 'published')
+            .single();
 
-        const [posts] = await pool.query('SELECT * FROM posts WHERE slug = ? AND status = "published"', [req.params.slug]);
-        if (posts.length === 0) return res.status(404).json({ message: 'Post not found' });
-        res.json(posts[0]);
+        if (error || !post) return res.status(404).json({ message: 'Post not found' });
+
+        await supabase
+            .from('posts')
+            .update({ views: (post.views || 0) + 1 })
+            .eq('id', post.id);
+
+        res.json(post);
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
 module.exports = router;
+

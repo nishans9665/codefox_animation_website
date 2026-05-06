@@ -2,17 +2,21 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const pool = require('../db');
+const supabase = require('../supabase');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-        if (users.length === 0) return res.status(401).json({ message: 'Invalid credentials' });
+        const { data: user, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single();
 
-        const user = users[0];
+        if (error || !user) return res.status(401).json({ message: 'Invalid credentials' });
+
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -27,12 +31,18 @@ router.post('/login', async (req, res) => {
 // Check auth status
 router.get('/me', authMiddleware, async (req, res) => {
     try {
-        const [users] = await pool.query('SELECT id, name, email, role FROM users WHERE id = ?', [req.user.id]);
-        if (users.length === 0) return res.status(404).json({ message: 'User not found' });
-        res.json(users[0]);
+        const { data: user, error } = await supabase
+            .from('users')
+            .select('id, name, email, role')
+            .eq('id', req.user.id)
+            .single();
+
+        if (error || !user) return res.status(404).json({ message: 'User not found' });
+        res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 });
 
 module.exports = router;
+

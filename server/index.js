@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const path = require('path');
 const helmet = require('helmet');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
+
 
 const app = express();
 
