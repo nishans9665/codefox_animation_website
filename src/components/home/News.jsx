@@ -98,6 +98,12 @@ const News = () => {
                         </div>
                     ))}
                 </div>
+
+                <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                    <Link to="/blog" className="btn btn-primary">
+                        View All Insights
+                    </Link>
+                </div>
             </div>
         </section>
     );
