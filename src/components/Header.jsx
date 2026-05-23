@@ -9,6 +9,7 @@ import './Header.css';
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [expandedMenuIndex, setExpandedMenuIndex] = useState(null);
     const location = useLocation();
     const { isDarkMode, toggleTheme } = useTheme();
 
@@ -41,6 +42,7 @@ const Header = () => {
 
     const closeMenu = () => {
         setIsMobileMenuOpen(false);
+        setExpandedMenuIndex(null);
     };
 
     const navLinks = [
@@ -135,18 +137,31 @@ const Header = () => {
                             <li key={idx} style={{ width: '100%', textAlign: 'center' }}>
                                 {link.dropdown ? (
                                     <>
-                                        <div className="mobile-nav-link" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                                            {link.name} <ChevronDown size={20} />
+                                        <div 
+                                            className="mobile-nav-link" 
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer' }}
+                                            onClick={() => setExpandedMenuIndex(expandedMenuIndex === idx ? null : idx)}
+                                        >
+                                            {link.name} 
+                                            <ChevronDown 
+                                                size={20} 
+                                                style={{ 
+                                                    transform: expandedMenuIndex === idx ? 'rotate(180deg)' : 'rotate(0deg)', 
+                                                    transition: 'transform 0.3s' 
+                                                }}
+                                            />
                                         </div>
-                                        <ul className="mobile-dropdown-menu">
-                                            {link.dropdown.map((sub, i) => (
-                                                <li key={i}>
-                                                    <Link to={sub.path} className="mobile-dropdown-item" onClick={closeMenu}>
-                                                        {sub.name}
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        {expandedMenuIndex === idx && (
+                                            <ul className="mobile-dropdown-menu">
+                                                {link.dropdown.map((sub, i) => (
+                                                    <li key={i}>
+                                                        <Link to={sub.path} className="mobile-dropdown-item" onClick={closeMenu}>
+                                                            {sub.name}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
                                     </>
                                 ) : (
                                     <Link to={link.path} className="mobile-nav-link" onClick={closeMenu}>
