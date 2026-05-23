@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const supabase = require('../supabase');
+const prisma = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const storage = multer.diskStorage({
@@ -16,12 +16,10 @@ const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
     try {
-        const { data: projects, error } = await supabase
-            .from('projects')
-            .select('*')
-            .order('created_at', { ascending: false });
+        const projects = await prisma.project.findMany({
+            orderBy: { created_at: 'desc' }
+        });
 
-        if (error) throw error;
         res.json(projects);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -37,15 +35,11 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
     }
 
     try {
-        const { data, error } = await supabase
-            .from('projects')
-            .insert([
-                { title, category, image: imagePath, project_url: project_url || '' }
-            ])
-            .select();
+        const project = await prisma.project.create({
+            data: { title, category, image: imagePath, project_url: project_url || '' }
+        });
 
-        if (error) throw error;
-        res.status(201).json({ message: 'Project created', id: data[0].id });
+        res.status(201).json({ message: 'Project created', id: project.id });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -59,12 +53,11 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
         const updateData = { title, category, project_url: project_url || '' };
         if (imagePath) updateData.image = imagePath;
         
-        const { error } = await supabase
-            .from('projects')
-            .update(updateData)
-            .eq('id', req.params.id);
+        await prisma.project.update({
+            where: { id: parseInt(req.params.id) },
+            data: updateData
+        });
 
-        if (error) throw error;
         res.json({ message: 'Project updated' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -73,12 +66,10 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
 
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        const { error } = await supabase
-            .from('projects')
-            .delete()
-            .eq('id', req.params.id);
+        await prisma.project.delete({
+            where: { id: parseInt(req.params.id) }
+        });
 
-        if (error) throw error;
         res.json({ message: 'Project deleted' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

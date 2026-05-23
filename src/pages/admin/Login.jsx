@@ -30,13 +30,13 @@ const AdminLogin = () => {
     <div className="admin-login-container">
       <div className="admin-login-card glass-panel">
         <Lock size={40} className="text-gradient" style={{ margin: '0 auto 1.5rem auto' }} />
-        <h2>CodeFox <span className="text-gradient">Admin</span></h2>
+        <h2>Codectals <span className="text-gradient">Admin</span></h2>
         <p>Enter your CRM credentials to access the panel</p>
 
         <form className="login-form" onSubmit={handleLogin}>
           <div className="form-group">
             <label>Email Address</label>
-            <input type="email" placeholder="admin@codefoxit.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" placeholder="admin@codectals.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="form-group">
             <label>Password</label>

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const supabase = require('../supabase');
+const prisma = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 const nodemailer = require('nodemailer');
 const { body, validationResult } = require('express-validator');
@@ -49,13 +49,9 @@ router.post('/',
         const cleanMessage = xss.inHTMLData(message);
 
         try {
-            const { error } = await supabase
-                .from('contacts')
-                .insert([
-                    { full_name: cleanName, email: cleanEmail, phone: cleanPhone || null, subject: cleanSubject, message: cleanMessage, is_read: false }
-                ]);
-
-            if (error) throw error;
+            await prisma.contact.create({
+                data: { full_name: cleanName, email: cleanEmail, phone: cleanPhone || null, subject: cleanSubject, message: cleanMessage, is_read: false }
+            });
 
             // Send Email to Admin
             const adminMailOptions = {
@@ -118,19 +114,20 @@ router.get('/', authMiddleware, async (req, res) => {
         const offset = (page - 1) * limit;
         const search = req.query.search || '';
 
-        let query = supabase
-            .from('contacts')
-            .select('*', { count: 'exact' });
+        const whereClause = search ? {
+            OR: [
+                { full_name: { contains: search } },
+                { email: { contains: search } }
+            ]
+        } : {};
 
-        if (search) {
-            query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
-        }
-
-        const { data: contacts, count: total, error } = await query
-            .order('created_at', { ascending: false })
-            .range(offset, offset + limit - 1);
-
-        if (error) throw error;
+        const total = await prisma.contact.count({ where: whereClause });
+        const contacts = await prisma.contact.findMany({
+            where: whereClause,
+            orderBy: { created_at: 'desc' },
+            skip: offset,
+            take: limit
+        });
 
         res.json({
             data: contacts,
@@ -150,13 +147,11 @@ router.get('/', authMiddleware, async (req, res) => {
 // Admin ONLY: View single contact
 router.get('/:id', authMiddleware, async (req, res) => {
     try {
-        const { data: contact, error } = await supabase
-            .from('contacts')
-            .select('*')
-            .eq('id', req.params.id)
-            .single();
+        const contact = await prisma.contact.findUnique({
+            where: { id: parseInt(req.params.id) }
+        });
 
-        if (error || !contact) return res.status(404).json({ message: 'Not found' });
+        if (!contact) return res.status(404).json({ message: 'Not found' });
         res.json(contact);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -167,12 +162,10 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.put('/:id/read', authMiddleware, async (req, res) => {
     try {
         const { is_read } = req.body;
-        const { error } = await supabase
-            .from('contacts')
-            .update({ is_read })
-            .eq('id', req.params.id);
-
-        if (error) throw error;
+        await prisma.contact.update({
+            where: { id: parseInt(req.params.id) },
+            data: { is_read }
+        });
         res.json({ message: 'Status updated successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -182,12 +175,9 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 // Admin ONLY: Delete contact
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        const { error } = await supabase
-            .from('contacts')
-            .delete()
-            .eq('id', req.params.id);
-
-        if (error) throw error;
+        await prisma.contact.delete({
+            where: { id: parseInt(req.params.id) }
+        });
         res.json({ message: 'Deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });

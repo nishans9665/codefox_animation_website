@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const supabase = require('../supabase');
+const prisma = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Get all users
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const { data: users, error } = await supabase
-            .from('users')
-            .select('id, name, email, role, created_at');
+        const users = await prisma.user.findMany({
+            select: { id: true, name: true, email: true, role: true, created_at: true }
+        });
 
-        if (error) throw error;
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -26,13 +25,10 @@ router.post('/', authMiddleware, async (req, res) => {
     const { name, email, password, role } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const { error } = await supabase
-            .from('users')
-            .insert([
-                { name, email, password: hashedPassword, role: role || 'Editor' }
-            ]);
+        await prisma.user.create({
+            data: { name, email, password: hashedPassword, role: role || 'Editor' }
+        });
 
-        if (error) throw error;
         res.status(201).json({ message: 'User created' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -55,12 +51,11 @@ router.put('/:id', authMiddleware, async (req, res) => {
             updateData.password = hashedPassword;
         }
 
-        const { error } = await supabase
-            .from('users')
-            .update(updateData)
-            .eq('id', req.params.id);
+        await prisma.user.update({
+            where: { id: parseInt(req.params.id) },
+            data: updateData
+        });
 
-        if (error) throw error;
         res.json({ message: 'User updated' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -76,12 +71,10 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     }
 
     try {
-        const { error } = await supabase
-            .from('users')
-            .delete()
-            .eq('id', req.params.id);
+        await prisma.user.delete({
+            where: { id: parseInt(req.params.id) }
+        });
 
-        if (error) throw error;
         res.json({ message: 'User deleted' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

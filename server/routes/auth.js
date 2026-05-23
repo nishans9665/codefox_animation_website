@@ -2,20 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const supabase = require('../supabase');
+const prisma = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const { data: user, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('email', email)
-            .single();
+        const user = await prisma.user.findUnique({ where: { email } });
 
-        if (error || !user) return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).json({ message: 'Invalid credentials' });
@@ -31,13 +27,12 @@ router.post('/login', async (req, res) => {
 // Check auth status
 router.get('/me', authMiddleware, async (req, res) => {
     try {
-        const { data: user, error } = await supabase
-            .from('users')
-            .select('id, name, email, role')
-            .eq('id', req.user.id)
-            .single();
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: { id: true, name: true, email: true, role: true }
+        });
 
-        if (error || !user) return res.status(404).json({ message: 'User not found' });
+        if (!user) return res.status(404).json({ message: 'User not found' });
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });

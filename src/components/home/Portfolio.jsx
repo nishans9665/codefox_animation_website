@@ -91,7 +91,7 @@ const Portfolio = () => {
                 </div>
 
                 <div className="portfolio-action reveal" style={{ transitionDelay: '0.4s' }}>
-                    <Link to="/portfolio" className="btn btn-secondary load-more">View All Projects</Link>
+                    <Link to="/portfolio" className="btn btn-primary">View All Projects</Link>
                 </div>
             </div>
         </section>

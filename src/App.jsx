@@ -15,6 +15,7 @@ import EcommerceDevelopment from './pages/EcommerceDevelopment';
 import WebOptimization from './pages/WebOptimization';
 import SoftwareSolutions from './pages/SoftwareSolutions';
 import UiUxDesign from './pages/UiUxDesign';
+import BlogPage from './pages/BlogPage';
 import { Toaster } from 'react-hot-toast';
 
 // Admin Pages
@@ -82,6 +83,7 @@ function App() {
           <Route path="/services/web-optimization" element={<WebOptimization />} />
           <Route path="/software-solutions" element={<SoftwareSolutions />} />
           <Route path="/ui-ux-design" element={<UiUxDesign />} />
+          <Route path="/blog" element={<BlogPage />} />
           <Route path="/post/:slug" element={<SinglePost />} />
         </Route>
 
