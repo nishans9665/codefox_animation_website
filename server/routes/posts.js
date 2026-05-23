@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const supabase = require('../supabase');
+const prisma = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Set up multer for image storage
@@ -21,13 +21,11 @@ const upload = multer({
 // Public: Get all published posts
 router.get('/', async (req, res) => {
     try {
-        const { data: posts, error } = await supabase
-            .from('posts')
-            .select('*')
-            .eq('status', 'published')
-            .order('created_at', { ascending: false });
+        const posts = await prisma.post.findMany({
+            where: { status: 'published' },
+            orderBy: { created_at: 'desc' }
+        });
 
-        if (error) throw error;
         res.json(posts);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -37,12 +35,10 @@ router.get('/', async (req, res) => {
 // Admin ONLY: Get all posts (including drafts)
 router.get('/admin', authMiddleware, async (req, res) => {
     try {
-        const { data: posts, error } = await supabase
-            .from('posts')
-            .select('*')
-            .order('created_at', { ascending: false });
+        const posts = await prisma.post.findMany({
+            orderBy: { created_at: 'desc' }
+        });
 
-        if (error) throw error;
         res.json(posts);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -54,20 +50,11 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
     const { title, slug, category, content, status } = req.body;
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
     try {
-        const { data, error } = await supabase
-            .from('posts')
-            .insert([
-                { title, slug, category, image: imagePath, content, status: status || 'draft' }
-            ])
-            .select();
+        const post = await prisma.post.create({
+            data: { title, slug, category, image: imagePath, content, status: status || 'draft' }
+        });
 
-        if (error) {
-            if (error.code === '23505') { // Postgres unique violation code
-                return res.status(400).json({ message: `Article with slug '${slug}' already exists. Please change the title.` });
-            }
-            throw error;
-        }
-        res.status(201).json({ message: 'Post created', id: data[0].id });
+        res.status(201).json({ message: 'Post created', id: post.id });
     } catch (error) {
         console.error('SERVER_ERROR_POST:', error);
         res.status(500).json({ message: 'Server error saving article', error: error.message });
@@ -83,12 +70,10 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
         const updateData = { title, slug, category, content, status };
         if (imagePath) updateData.image = imagePath;
 
-        const { error } = await supabase
-            .from('posts')
-            .update(updateData)
-            .eq('id', req.params.id);
-
-        if (error) throw error;
+        await prisma.post.update({
+            where: { id: parseInt(req.params.id) },
+            data: updateData
+        });
         res.json({ message: 'Post updated' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -98,12 +83,9 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
 // Admin ONLY: Delete post
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        const { error } = await supabase
-            .from('posts')
-            .delete()
-            .eq('id', req.params.id);
-
-        if (error) throw error;
+        await prisma.post.delete({
+            where: { id: parseInt(req.params.id) }
+        });
         res.json({ message: 'Post deleted' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -115,19 +97,16 @@ router.get('/article/:slug', async (req, res) => {
     try {
         // Increment view count using rpc or manual update
         // Manual update for simplicity now (Note: not atomic like views = views + 1)
-        const { data: post, error } = await supabase
-            .from('posts')
-            .select('*')
-            .eq('slug', req.params.slug)
-            .eq('status', 'published')
-            .single();
+        const post = await prisma.post.findFirst({
+            where: { slug: req.params.slug, status: 'published' }
+        });
 
-        if (error || !post) return res.status(404).json({ message: 'Post not found' });
+        if (!post) return res.status(404).json({ message: 'Post not found' });
 
-        await supabase
-            .from('posts')
-            .update({ views: (post.views || 0) + 1 })
-            .eq('id', post.id);
+        await prisma.post.update({
+            where: { id: post.id },
+            data: { views: { increment: 1 } }
+        });
 
         res.json(post);
     } catch (error) {
