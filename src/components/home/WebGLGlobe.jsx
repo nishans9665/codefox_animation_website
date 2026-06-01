@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Globe from 'react-globe.gl';
 import * as THREE from 'three';
 
-const WebGLGlobe = () => {
+const WebGLGlobe = ({ isMobile }) => {
     const containerRef = useRef(null);
     const globeEl = useRef(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -61,13 +61,20 @@ const WebGLGlobe = () => {
 
             cities.forEach(city => {
                 const isHub = hubs.some(h => h.name === city.name);
-                // Made the dots slightly smaller and more delicate for a premium tech feel
+                
+                // On mobile, only render points for hubs to save GPU memory
+                if (isMobile && !isHub) return;
+
                 points.push({ lat: city.lat, lng: city.lng, size: isHub ? 0.7 : 0.25, color: '#ffffff' });
-                // Tighter logic for the ripples
-                rings.push({ lat: city.lat, lng: city.lng, maxRadius: isHub ? 3.5 : 1.5 });
+                
+                // Dramatically reduce rings on mobile (only 1 out of 3 hubs gets rings)
+                if (!isMobile || (isMobile && isHub && Math.random() > 0.6)) {
+                    rings.push({ lat: city.lat, lng: city.lng, maxRadius: isHub ? 3.5 : 1.5 });
+                }
             });
 
-            const numConnections = 35;
+            // Huge performance gain: drop connection count from 35 to 8 on mobile
+            const numConnections = isMobile ? 8 : 35;
             for (let i = 0; i < numConnections; i++) {
                 const startHub = hubs[Math.floor(Math.random() * hubs.length)];
                 let destCity;
@@ -75,8 +82,6 @@ const WebGLGlobe = () => {
                     destCity = cities[Math.floor(Math.random() * cities.length)];
                 } while (destCity.name === startHub.name);
 
-                // REFINED ARC COLORS: Fading orange smoothly into pure transparent logic 
-                // avoiding any muddy blue color mix! This makes lines look like pure fiber optics.
                 const vibrantColors = [
                     ['rgba(255, 123, 0, 0.95)', 'rgba(255, 123, 0, 0.05)'], 
                     ['rgba(255, 180, 0, 0.85)', 'rgba(255, 123, 0, 0.05)'],
@@ -99,12 +104,12 @@ const WebGLGlobe = () => {
         setArcsData(data.arcs);
         setPointsData(data.points);
         setRingsData(data.rings);
-    }, []);
+    }, [isMobile]); // Regenerate data if mobile state changes
 
     useEffect(() => {
         if (globeEl.current && dimensions.width > 0) {
             globeEl.current.controls().autoRotate = true;
-            globeEl.current.controls().autoRotateSpeed = 1.0;
+            globeEl.current.controls().autoRotateSpeed = isMobile ? 0.6 : 1.0; // Slower on mobile to reduce jitter
             globeEl.current.controls().enableZoom = false;
 
             globeEl.current.pointOfView({ altitude: 8.0 });
@@ -112,16 +117,12 @@ const WebGLGlobe = () => {
             setTimeout(() => {
                 globeEl.current.pointOfView({ altitude: 2.2 }, 3500);
             }, 300);
-
-            // Removing the 3D starfield because you already added the beautiful CSS stars to Hero.jsx!
-            // Having both would double the stars and hurt performance.
         }
-    }, [dimensions]);
+    }, [dimensions, isMobile]);
 
-    // Using earth-night instead of earth-dark gives us the gorgeous city lights back
-    // which pairs incredibly well with the translucent orange country overlay!
     const globeImageUrl = '//unpkg.com/three-globe/example/img/earth-night.jpg';
-    const bumpImageUrl = '//unpkg.com/three-globe/example/img/earth-topology.png';
+    // Remove heavy bump map on mobile to significantly boost performance
+    const bumpImageUrl = isMobile ? null : '//unpkg.com/three-globe/example/img/earth-topology.png';
 
     return (
         <div
@@ -154,16 +155,16 @@ const WebGLGlobe = () => {
                         globeImageUrl={globeImageUrl}
                         bumpImageUrl={bumpImageUrl}
                         backgroundColor="rgba(0,0,0,0)"
-                        // Changed the atmosphere glow to a pure, polished CodeFox brand orange
+                        
                         atmosphereColor="rgba(255, 123, 0, 0.5)" 
-                        atmosphereAltitude={0.2}
+                        atmosphereAltitude={isMobile ? 0.1 : 0.2}
 
                         polygonsData={countries.features}
-                        polygonAltitude={0.012}
-                        // Made the orange transparent! Now the city lights will beautifully shine THROUGH the orange
+                        // Flatten polygons on mobile to avoid 3D geometry generation cost
+                        polygonAltitude={isMobile ? 0.001 : 0.012}
                         polygonCapColor={() => 'rgba(63, 44, 0, 0.5)'} 
-                        polygonSideColor={() => 'rgba(201, 197, 197, 0.05)'}
-                        // Thinner, much more elegant border! Translucent neon orange.
+                        // Turn off expensive side rendering on mobile
+                        polygonSideColor={() => isMobile ? 'rgba(0,0,0,0)' : 'rgba(201, 197, 197, 0.05)'}
                         polygonStrokeColor={() => 'rgba(255, 123, 0, 0.4)'} 
 
                         arcsData={arcsData}
@@ -171,8 +172,8 @@ const WebGLGlobe = () => {
                         arcDashLength={0.5}
                         arcDashGap={0.2}
                         arcDashInitialGap={() => Math.random()}
-                        arcDashAnimateTime={2000}
-                        arcStroke={0.4} // Thinned out the arcs slightly for an elegant look
+                        arcDashAnimateTime={isMobile ? 4000 : 2000} // Slower animations on mobile for smoothness
+                        arcStroke={isMobile ? 0.6 : 0.4} // Slightly thicker since there are fewer
 
                         pointsData={pointsData}
                         pointColor="color"
