@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Rocket } from 'lucide-react';
-import WebGLGlobe from './WebGLGlobe';
 import './Hero.css';
 
+const WebGLGlobe = lazy(() => import('./WebGLGlobe'));
+
 const Hero = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        // Initial check
+        setIsMobile(window.innerWidth < 1024);
+        
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <section className="hero-section" id="home" style={{ position: 'relative' }}>
             {/* The space/starfield background has been moved globally to Home.jsx! */}
@@ -73,7 +88,9 @@ const Hero = () => {
                         <p>System Online</p>
                     </div>
 
-                    <WebGLGlobe />
+                    <Suspense fallback={<div className="globe-loader"></div>}>
+                        <WebGLGlobe isMobile={isMobile} />
+                    </Suspense>
 
                     <div className="hero-img-glow"></div>
                 </div>

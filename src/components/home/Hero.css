@@ -196,6 +196,44 @@
     transform: translate(-50%, -50%);
 }
 
+/* Fallback for mobile so WebGL doesn't freeze the phone */
+.mobile-globe-placeholder {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.globe-circle {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 123, 0, 0.4), rgba(63, 44, 0, 0.8));
+    border: 1px solid rgba(255, 123, 0, 0.5);
+    box-shadow: 0 0 40px rgba(255, 123, 0, 0.3), inset 0 0 20px rgba(255, 123, 0, 0.5);
+    animation: pulseGlobe 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlobe {
+    0% { box-shadow: 0 0 40px rgba(255, 123, 0, 0.3), inset 0 0 20px rgba(255, 123, 0, 0.5); transform: scale(1); }
+    100% { box-shadow: 0 0 60px rgba(255, 123, 0, 0.5), inset 0 0 30px rgba(255, 123, 0, 0.7); transform: scale(1.02); }
+}
+
+.globe-loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 123, 0, 0.2);
+    border-top-color: #ff7b00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .floating-card {
     position: absolute;
     background: var(--card-bg);
