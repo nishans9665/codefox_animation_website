@@ -248,16 +248,31 @@
 }
 
 @media (max-width: 992px) {
-    .intro-grid {
+    .custom-web-page .intro-grid {
         grid-template-columns: 1fr;
+        gap: 2.5rem;
     }
 }
 
 @media (max-width: 768px) {
-    .hero-stats {
+    .custom-web-page .hero-stats {
         gap: 1.5rem;
     }
-    .cta-box h2 {
+    .custom-web-page .cta-box h2 {
         font-size: 2rem;
+    }
+    .custom-web-page .intro-text h2 {
+        font-size: 2rem;
+    }
+    .custom-web-page .intro-section {
+        padding: 60px 0;
+    }
+    .custom-web-page .custom-page-header {
+        padding: 120px 0 60px;
+    }
+    .custom-web-page .features-section,
+    .custom-web-page .industries-section,
+    .custom-web-page .faq-section {
+        padding: 60px 0;
     }
 }

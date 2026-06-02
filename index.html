@@ -12,6 +12,19 @@
   <meta name="keywords" content="IT services, web development, software development, UI/UX, tech agency" />
   <meta property="og:title" content="CodeFox IT | Professional Technology Agency" />
   <meta property="og:description" content="We build smart digital solutions to propel your business forward." />
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          // Default to dark
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 
 <body>
