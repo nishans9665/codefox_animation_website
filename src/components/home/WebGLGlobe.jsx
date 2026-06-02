@@ -156,7 +156,7 @@ const WebGLGlobe = ({ isMobile }) => {
                         bumpImageUrl={bumpImageUrl}
                         backgroundColor="rgba(0,0,0,0)"
                         
-                        atmosphereColor="rgba(255, 123, 0, 0.5)" 
+                        atmosphereColor="#ff7b00" 
                         atmosphereAltitude={isMobile ? 0.1 : 0.2}
 
                         polygonsData={countries.features}

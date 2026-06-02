@@ -10,7 +10,20 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const app = express();
 
 // Middleware
-app.use(helmet({ crossOriginResourcePolicy: false }));
+app.use(helmet({ 
+    crossOriginResourcePolicy: false,
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            connectSrc: ["'self'", "https:", "http:"],
+            imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
+            fontSrc: ["'self'", "data:", "https:", "http:"],
+            workerSrc: ["'self'", "blob:"],
+        }
+    }
+}));
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
