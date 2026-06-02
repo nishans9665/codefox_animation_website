@@ -5,11 +5,12 @@ require('dotenv').config();
 async function initDB() {
     try {
         // Connect without database first to create it if it doesn't exist
-        const connection = await mysql.createConnection({
+        const dbConfig = process.env.DATABASE_URL || {
             host: process.env.DB_HOST || 'localhost',
             user: process.env.DB_USER || 'root',
             password: process.env.DB_PASSWORD || '123456',
-        });
+        };
+        const connection = await mysql.createConnection(dbConfig);
 
         const dbName = process.env.DB_NAME || 'codefox_crm';
         await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
