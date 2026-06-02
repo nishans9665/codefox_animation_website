@@ -19,11 +19,11 @@ const SinglePost = () => {
         window.scrollTo(0, 0); // Reset scroll position when loading a new post
         
         // Fetch exactly one post based on the slug URL
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/article/${slug}`)
+        axios.get(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts/article/${slug}`)
             .then(res => {
                 setPost(res.data);
                 // After getting the post, fetch all posts
-                return axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`);
+                return axios.get(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts`);
             })
             .then(res => {
                 if (res && res.data) {
@@ -58,7 +58,7 @@ const SinglePost = () => {
     }
 
     const imageUrl = post.image 
-        ? (post.image.startsWith('http') ? post.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}`)
+        ? (post.image.startsWith('http') ? post.image : `${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}${post.image}`)
         : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
 
 
@@ -133,7 +133,7 @@ const SinglePost = () => {
                                     <Link to={`/post/${rp.slug}`} key={rp.id} className="related-post-card">
                                         <div 
                                             className="rp-image" 
-                                            style={{ backgroundImage: `url(${rp.image?.startsWith('http') ? rp.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${rp.image}`})` }}
+                                            style={{ backgroundImage: `url(${rp.image?.startsWith('http') ? rp.image : `${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}${rp.image}`})` }}
                                         ></div>
                                         <div className="rp-content">
                                             <h4 className="rp-title">{rp.title}</h4>
