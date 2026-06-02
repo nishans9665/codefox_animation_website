@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run server\"",
+    "start": "node server/index.js",
     "server": "nodemon server/index.js",
-    "build": "vite build",
+    "build": "vite build && cd server && npm install && npx prisma generate",
     "lint": "eslint .",
     "preview": "vite preview"
   },

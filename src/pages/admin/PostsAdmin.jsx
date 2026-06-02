@@ -62,7 +62,7 @@ const PostsAdmin = () => {
     const fetchPosts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/admin`, {
+            const res = await axios.get(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts/admin`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPosts(res.data);
@@ -112,7 +112,7 @@ const PostsAdmin = () => {
                 content: post.content,
                 status: post.status
             });
-            setImagePreview(post.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${post.image}` : '');
+            setImagePreview(post.image ? `${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}${post.image}` : '');
             setImageFile(null);
         } else {
             setEditingPost(null);
@@ -156,10 +156,10 @@ const PostsAdmin = () => {
 
         try {
             if (editingPost) {
-                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${editingPost.id}`, data, axiosConfig);
+                await axios.put(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts/${editingPost.id}`, data, axiosConfig);
                 toast.success("Blog post updated successfully!");
             } else {
-                await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`, data, axiosConfig);
+                await axios.post(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts`, data, axiosConfig);
                 toast.success("New blog post published!");
             }
             closeModal();
@@ -176,7 +176,7 @@ const PostsAdmin = () => {
 
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${id}`, {
+            await axios.delete(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success("Post deleted permanently");
@@ -197,7 +197,7 @@ const PostsAdmin = () => {
         data.append('status', newStatus);
 
         try {
-            await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts/${post.id}`, data, {
+            await axios.put(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts/${post.id}`, data, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
             });
             toast.success(`Post marked as ${newStatus}`);

@@ -41,7 +41,7 @@ const BlogPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/posts`)
+        axios.get(`${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}/api/posts`)
             .then(res => {
                 if (res.data && res.data.length > 0) {
                     setNewsItems(res.data);
@@ -61,7 +61,7 @@ const BlogPage = () => {
     const resolveImage = (imgSrc) => {
         if (!imgSrc) return "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80";
         if (imgSrc.startsWith('http')) return imgSrc;
-        return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${imgSrc}`; 
+        return `${(import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000'))}${imgSrc}`; 
     };
 
     return (
