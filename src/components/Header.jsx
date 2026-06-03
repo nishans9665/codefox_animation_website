@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import logoLight from '../assets/codefox-logo.png';
-import logoDark from '../assets/codefox-write-logo.png';
+import logoLight from '../assets/codefox-logo.webp';
+import logoDark from '../assets/codefox-write-logo.webp';
 import './Header.css';
 
 const Header = () => {

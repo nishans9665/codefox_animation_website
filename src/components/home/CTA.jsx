@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
-import ctaBg from '../../assets/cta-section-bg-image.png';
+import ctaBg from '../../assets/cta-section-bg-image.webp';
 import rocketImg from '../../assets/view-3d-space-rocket-model.webp';
 import astronautImg from '../../assets/Space man astronaut flying.png';
 import './CTA.css';
