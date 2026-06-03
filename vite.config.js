@@ -5,21 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('three')) return 'three';
-            if (id.includes('react-globe.gl')) return 'globe';
-            if (id.includes('recharts')) return 'recharts';
-            if (id.includes('jspdf')) return 'jspdf';
-            if (id.includes('jodit-react')) return 'jodit';
-            if (id.includes('react')) return 'vendor';
-            return 'modules';
-          }
-        }
-      }
-    },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 2000
   }
 }) 
