@@ -1,31 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import About from './pages/About';
-import ContactUs from './pages/ContactUs';
-import SinglePost from './pages/SinglePost';
-import PortfolioPage from './pages/PortfolioPage';
-import CustomWebDevelopment from './pages/CustomWebDevelopment';
-import WordPressDevelopment from './pages/WordPressDevelopment';
-import EcommerceDevelopment from './pages/EcommerceDevelopment';
-import WebOptimization from './pages/WebOptimization';
-import SoftwareSolutions from './pages/SoftwareSolutions';
-import UiUxDesign from './pages/UiUxDesign';
-import BlogPage from './pages/BlogPage';
-import { Toaster } from 'react-hot-toast';
+
+
+// Lazy loaded main pages
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
+const SinglePost = lazy(() => import('./pages/SinglePost'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
+const CustomWebDevelopment = lazy(() => import('./pages/CustomWebDevelopment'));
+const WordPressDevelopment = lazy(() => import('./pages/WordPressDevelopment'));
+const EcommerceDevelopment = lazy(() => import('./pages/EcommerceDevelopment'));
+const WebOptimization = lazy(() => import('./pages/WebOptimization'));
+const SoftwareSolutions = lazy(() => import('./pages/SoftwareSolutions'));
+const UiUxDesign = lazy(() => import('./pages/UiUxDesign'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
 
 // Admin Pages
-import AdminLayout from './components/admin/AdminLayout';
-import AdminLogin from './pages/admin/Login';
-import Dashboard from './pages/admin/Dashboard';
-import UsersAdmin from './pages/admin/UsersAdmin';
-import PostsAdmin from './pages/admin/PostsAdmin';
-import ProjectsAdmin from './pages/admin/ProjectsAdmin';
-import ContactsAdmin from './pages/admin/ContactsAdmin';
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
+const AdminLogin = lazy(() => import('./pages/admin/Login'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const UsersAdmin = lazy(() => import('./pages/admin/UsersAdmin'));
+const PostsAdmin = lazy(() => import('./pages/admin/PostsAdmin'));
+const ProjectsAdmin = lazy(() => import('./pages/admin/ProjectsAdmin'));
+const ContactsAdmin = lazy(() => import('./pages/admin/ContactsAdmin'));
 
 // Dummy components to avoid breaking imports for CRM features yet to be fully coded on frontend
 const DummyAdminPage = ({ title }) => (
@@ -70,33 +73,35 @@ function App() {
       <Toaster position="top-right" toastOptions={{
         style: { background: '#2d3748', color: '#fff', borderRadius: '10px' }
       }} />
-      <Routes>
-        {/* Main Website Client Routes */}
-        <Route element={<MainSiteLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/services/custom-web-development" element={<CustomWebDevelopment />} />
-          <Route path="/services/wordpress-development" element={<WordPressDevelopment />} />
-          <Route path="/services/ecommerce-development" element={<EcommerceDevelopment />} />
-          <Route path="/services/web-optimization" element={<WebOptimization />} />
-          <Route path="/software-solutions" element={<SoftwareSolutions />} />
-          <Route path="/ui-ux-design" element={<UiUxDesign />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/post/:slug" element={<SinglePost />} />
-        </Route>
+      <Suspense fallback={<div className="loading-fallback">Loading...</div>}>
+        <Routes>
+          {/* Main Website Client Routes */}
+          <Route element={<MainSiteLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/services/custom-web-development" element={<CustomWebDevelopment />} />
+            <Route path="/services/wordpress-development" element={<WordPressDevelopment />} />
+            <Route path="/services/ecommerce-development" element={<EcommerceDevelopment />} />
+            <Route path="/services/web-optimization" element={<WebOptimization />} />
+            <Route path="/software-solutions" element={<SoftwareSolutions />} />
+            <Route path="/ui-ux-design" element={<UiUxDesign />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/post/:slug" element={<SinglePost />} />
+          </Route>
 
-        {/* Admin Dashboard Protected Routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="contacts" element={<ContactsAdmin />} />
-          <Route path="posts" element={<PostsAdmin />} />
-          <Route path="projects" element={<ProjectsAdmin />} />
-          <Route path="users" element={<UsersAdmin />} />
-        </Route>
-      </Routes>
+          {/* Admin Dashboard Protected Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="contacts" element={<ContactsAdmin />} />
+            <Route path="posts" element={<PostsAdmin />} />
+            <Route path="projects" element={<ProjectsAdmin />} />
+            <Route path="users" element={<UsersAdmin />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import './Footer.css';
-import logoLight from '../assets/codefox-logo.png';
-import logoDark from '../assets/codefox-write-logo.png';
+import logoLight from '../assets/codefox-logo.webp';
+import logoDark from '../assets/codefox-write-logo.webp';
 
 const Footer = () => {
     const location = useLocation();
