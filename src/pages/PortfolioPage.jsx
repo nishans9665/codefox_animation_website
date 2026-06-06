@@ -28,7 +28,7 @@ const PortfolioPage = () => {
 
     return (
         <div className="page portfolio-full-page">
-            <section className="page-header" style={{ paddingTop: '100px', paddingBottom: '40px' }}>
+            <section className="page-header" style={{ paddingTop: '160px', paddingBottom: '40px' }}>
                 <div className="container text-center">
                     <span className="subtitle animate-fade-in-up">Extensive Showcase</span>
                     <h1 className="page-title animate-fade-in-up delay-1">All Portfolio <span className="text-gradient">Projects</span></h1>
