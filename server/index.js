@@ -45,18 +45,16 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../dist')));
-    
-    app.get(/(.*)/, (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
-    });
-}
-
+// Serve frontend locally (optional, but Vercel handles this natively)
+// We remove the production static serving here because Vercel edge network serves the frontend.
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Only listen locally, Vercel will use the exported app as a serverless function
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
