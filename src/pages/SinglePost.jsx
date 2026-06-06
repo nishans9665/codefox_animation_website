@@ -49,7 +49,7 @@ const SinglePost = () => {
     if (error || !post) {
         return (
             <div className="single-post-page error-container">
-                <div className="container" style={{textAlign: 'center', paddingTop: '100px', paddingBottom: '100px'}}>
+                <div className="container" style={{textAlign: 'center', paddingTop: '160px', paddingBottom: '100px'}}>
                     <h2 className="mb-4">{error}</h2>
                     <Link to="/" className="btn btn-primary">Return to Homepage</Link>
                 </div>

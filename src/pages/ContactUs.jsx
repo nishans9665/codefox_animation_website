@@ -10,7 +10,7 @@ const ContactUs = () => {
     }, []);
 
     return (
-        <main className="contact-page" style={{ paddingTop: '100px' }}>
+        <main className="contact-page" style={{ paddingTop: '160px' }}>
             {/* Page Header */}
             <section className="page-header" style={{ paddingBottom: '2rem' }}>
                 <div className="container">

@@ -66,7 +66,7 @@ const BlogPage = () => {
 
     return (
         <div className="page blog-full-page">
-            <section className="page-header" style={{ paddingTop: '100px', paddingBottom: '40px' }}>
+            <section className="page-header" style={{ paddingTop: '160px', paddingBottom: '40px' }}>
                 <div className="container text-center">
                     <span className="subtitle animate-fade-in-up">News & Updates</span>
                     <h1 className="page-title animate-fade-in-up delay-1">Our <span className="text-gradient">Blog</span></h1>
