@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import { ThemeProvider } from './context/ThemeContext.jsx';
+import { Analytics } from "@vercel/analytics/next"
 
 // Suppress THREE.Clock deprecation warning from react-globe.gl
 const originalWarn = console.warn;
