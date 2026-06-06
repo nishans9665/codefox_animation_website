@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom
 import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { Analytics } from "@vercel/analytics/next";
 
 
 // Lazy loaded main pages
@@ -73,6 +74,7 @@ function App() {
       <Toaster position="top-right" toastOptions={{
         style: { background: '#2d3748', color: '#fff', borderRadius: '10px' }
       }} />
+      <Analytics />
       <Suspense fallback={<div className="loading-fallback">Loading...</div>}>
         <Routes>
           {/* Main Website Client Routes */}
